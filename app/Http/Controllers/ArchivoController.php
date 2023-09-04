@@ -13,15 +13,15 @@ class ArchivoController extends Controller
     {
         try {
             // Verificar si existe la imagen de la plaza
-            $rutaImagen = 'public/img/plazas/' . $idPlaza . '.jpg'; // Suponemos que las imágenes son archivos JPG
-            if (!Storage::exists($rutaImagen)) {
+            $rutaImagen = public_path('img/plazas/' . $idPlaza . '.jpg'); // Suponemos que las imágenes son archivos JPG
+            if (!file_exists($rutaImagen)) {
                 // return response()->json(['error' => 'No se encontró la imagen para la plaza seleccionada.'], 404);
                 // Obtener el contenido de la imagen por defecto
-                $rutaImagen = 'public/img/plazas/default.jpg';
+                $rutaImagen = public_path('img/plazas/default.jpg');
             }
     
             // Obtener el contenido de la imagen
-            $contenidoImagen = Storage::get($rutaImagen);
+            $contenidoImagen = file_get_contents($rutaImagen);
     
             // Devolver la imagen con la cabecera adecuada para que se muestre correctamente
             return Response::make($contenidoImagen, 200, ['Content-Type' => 'image/jpg']);
@@ -42,30 +42,34 @@ class ArchivoController extends Controller
                 if ($archivo->getClientOriginalExtension() !== 'jpg') {
                     return response()->json(['error' => 'El archivo debe ser de tipo JPG.'], 400);
                 }
-
+            
                 $plazaId = $request->input('plaza_id');
                 $extension = $archivo->getClientOriginalExtension();
                 $nombreArchivo = $plazaId . '.' . $extension;
                 $nombreArchivo = str_replace(' ', '_', $nombreArchivo); // Reemplazar espacios en blanco con guiones bajos
-                $rutaArchivo = public_path('storage/img/plazas/' . $nombreArchivo);
-
+                $rutaArchivo = public_path('img/plazas/' . $nombreArchivo);
+            
                 // Verificar si ya existe un archivo con el mismo nombre
-                if (file_exists($rutaArchivo) && is_file($rutaArchivo)) {
+                if (file_exists($rutaArchivo)) {
                     // Eliminar el archivo existente antes de reemplazarlo con el nuevo
                     unlink($rutaArchivo);
                 }
-
-                $archivo->storeAs('public/img/plazas', $nombreArchivo);
-
+            
+                // Mover el archivo al directorio public_path
+                $archivo->move(public_path('img/plazas'), $nombreArchivo);
+            
                 // Verificar si el archivo se ha guardado correctamente
                 if (file_exists($rutaArchivo) && is_file($rutaArchivo)) {
-                    return response()->json(['success' => 'Archivo subido y guardado correctamente.']);
+                    return redirect()->action([IndexController::class, 'index'])->with('subirImagen', 'success');
+
+                    // return response()->json(['success' => 'Archivo subido y guardado correctamente.']);
                 } else {
                     return response()->json(['error' => 'No se pudo guardar el archivo correctamente.'], 500);
                 }
             } else {
                 return response()->json(['error' => 'Archivo inválido o no se proporcionó ningún archivo.'], 400);
             }
+            
         } catch (\Exception $e) {
             // Manejar el error y devolver una respuesta con código 500 (Internal Server Error)
             return response()->json(['error' => 'Ha ocurrido un error al guardar el archivo.'], 500);

@@ -35,7 +35,12 @@ class PregrabadaController extends Controller
         //si se ejecuta el procedimiento mandamos a llamar a la funcion index
         DB::disconnect('dynamic');
         if ($exec) {
-            return $this->pdfPregabadas($idPlaza, $plaza, $fechaF);
+            // return $this->pdfPregabadas($idPlaza, $plaza, $fechaF);
+
+            return '<script type="text/javascript">window.open("pdfPregabadas/' . $idPlaza . '/'.$plaza.'/'.$fechaF.'")</script>' .
+                redirect()->action(
+                    [IndexController::class, 'index']
+                );
         }
     }
     public function pdfPregabadas($idPlaza, $plaza, $fechaF)
@@ -44,11 +49,12 @@ class PregrabadaController extends Controller
         ini_set('memory_limit', '-1');
         //Ruta imagen del reporte 
         // Verificar si existe la imagen de la plaza
-        $rutaImagen = 'storage/img/plazas/' . $idPlaza . '.jpg'; // Suponemos que las imágenes son archivos JPG
-        if (!Storage::exists($rutaImagen)) {
+        $rutaImagen = public_path('img/plazas/' . $idPlaza . '.jpg'); // Suponemos que las imágenes son archivos JPG
+        $imagen=$idPlaza;
+        if (!file_exists($rutaImagen)) {
             // return response()->json(['error' => 'No se encontró la imagen para la plaza seleccionada.'], 404);
             // Obtener el contenido de la imagen por defecto
-            $rutaImagen = 'storage/img/plazas/default.jpg';
+            $imagen = 'default';
         }
         //Tabla 1 
         $anio = anio($fechaF);
@@ -110,7 +116,7 @@ class PregrabadaController extends Controller
                 'result33' => $result33,
                 'result44' => $result44,
                 'total22' => $total22,
-                'rutaImagen' => $rutaImagen,
+                'rutaImagen' => $imagen,
                 //Nombre plaza 
                 'nombre' => $nombre,
                 //Fecha formateada
@@ -132,11 +138,11 @@ class PregrabadaController extends Controller
         $imagenSeguimiento= $request->imagenSeguimiento;
         //Ruta imagen del reporte 
         // Verificar si existe la imagen de la plaza
-        $rutaImagen = 'storage/img/plazas/' . $idPlaza . '.jpg'; // Suponemos que las imágenes son archivos JPG
-        if (!Storage::exists($rutaImagen)) {
+        $rutaImagen = public_path('img/plazas/' . $idPlaza . '.jpg'); // Suponemos que las imágenes son archivos JPG
+        if (!file_exists($rutaImagen)) {
             // return response()->json(['error' => 'No se encontró la imagen para la plaza seleccionada.'], 404);
             // Obtener el contenido de la imagen por defecto
-            $rutaImagen = 'storage/img/plazas/default.jpg';
+            $rutaImagen = public_path('img/plazas/default.jpg');
         }
         //Tabla 1 
         $anio = anio($fechaF);

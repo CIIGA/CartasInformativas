@@ -30,7 +30,9 @@ Inicio
 </style>
 @endsection
 @section('contenido')
+
 <div class="container-fluid">
+
     <div class="col-md-6 mx-auto">
         <div class="mb-3">
             <label for="combobox" class="form-label">Selecciona una plaza:</label>

@@ -48,11 +48,12 @@ class ContactController extends Controller
         ini_set('memory_limit', '-1');
         //Ruta imagen del reporte 
         // Verificar si existe la imagen de la plaza
-        $rutaImagen = 'storage/img/plazas/' . $idPlaza . '.jpg'; // Suponemos que las imágenes son archivos JPG
-        if (!Storage::exists($rutaImagen)) {
+        $rutaImagen = public_path('img/plazas/' . $idPlaza . '.jpg'); // Suponemos que las imágenes son archivos JPG
+        $imagen=$idPlaza;
+        if (!file_exists($rutaImagen)) {
             // return response()->json(['error' => 'No se encontró la imagen para la plaza seleccionada.'], 404);
             // Obtener el contenido de la imagen por defecto
-            $rutaImagen = 'storage/img/plazas/default.jpg';
+            $imagen = 'default';
         }
         //Se extrae el año y la fecha 
         $anio = anio($fechaF);
@@ -165,7 +166,7 @@ class ContactController extends Controller
                 'result4Seguimiento' => $result4Seguimiento,
                 'totalSeguimiento' => $totalSeguimiento,
                 //Ruta imagen
-                'rutaImagen' => $rutaImagen,
+                'rutaImagen' => $imagen,
                 //Nombre plaza 
                 'nombre' => $nombre,
                 //Fecha formateada
@@ -190,11 +191,11 @@ class ContactController extends Controller
 
         //Ruta imagen del reporte 
         // Verificar si existe la imagen de la plaza
-        $rutaImagen = 'storage/img/plazas/' . $idPlaza . '.jpg'; // Suponemos que las imágenes son archivos JPG
-        if (!Storage::exists($rutaImagen)) {
+        $rutaImagen = public_path('img/plazas/' . $idPlaza . '.jpg'); // Suponemos que las imágenes son archivos JPG
+        if (!file_exists($rutaImagen)) {
             // return response()->json(['error' => 'No se encontró la imagen para la plaza seleccionada.'], 404);
             // Obtener el contenido de la imagen por defecto
-            $rutaImagen = 'storage/img/plazas/default.jpg';
+            $rutaImagen = public_path('img/plazas/default.jpg');
         }
         //Se extrae el año y la fecha 
         $anio = anio($fechaF);

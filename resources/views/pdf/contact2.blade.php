@@ -47,7 +47,7 @@
 
 <body>
     <header>
-        <img class="imgHeader1" src="{{ public_path('storage/img/plazas/default.jpg') }}">
+        <img class="imgHeader1" src="{{ public_path('img/plazas/default.jpg') }}">
         <p class="infoHeader">
             <span class="bold">
                 Informe de Programa:
@@ -55,7 +55,7 @@
             <br />
             Contact Center
         </p>
-        <img class="imgHeader2" src="{{ public_path($rutaImagen) }}">
+        <img class="imgHeader2" src="{{ $rutaImagen }}">
     </header>
     <main>
         <p class="align-right mr-20">

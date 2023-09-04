@@ -81,10 +81,11 @@ class CorreoController extends Controller
         $fecha = str_replace('-', '/', $fecha);
         //Ruta imagen del reporte 
         // Verificar si existe la imagen de la plaza
-        $rutaImagen = 'storage/img/plazas/' . $idPlaza . '.jpg'; // Suponemos que las imágenes son archivos JPG
-        if (!Storage::exists($rutaImagen)) {
+        $rutaImagen = public_path('img/plazas/' . $idPlaza . '.jpg'); // Suponemos que las imágenes son archivos JPG
+        $imagen=$idPlaza;
+        if (!file_exists($rutaImagen)) {
             // Obtener el contenido de la imagen por defecto
-            $rutaImagen = 'storage/img/plazas/default.jpg';
+            $imagen = 'default';
         }
         //Consulta de las plazas 
         $databaseName1 = 'kpis';
@@ -124,7 +125,7 @@ class CorreoController extends Controller
                 'result1' => $result1,
                 'result2' => $result2,
                 //Ruta de imagen
-                'rutaImagen' => $rutaImagen,
+                'rutaImagen' => $imagen,
                 //Nombre plaza 
                 'nombre' => $nombre,
                 'idPlaza' => $idPlaza,
@@ -145,10 +146,10 @@ class CorreoController extends Controller
         $fecha = str_replace('-', '/', $fecha);
         //Ruta imagen del reporte 
         // Verificar si existe la imagen de la plaza
-        $rutaImagen = 'storage/img/plazas/' . $idPlaza . '.jpg'; // Suponemos que las imágenes son archivos JPG
-        if (!Storage::exists($rutaImagen)) {
+        $rutaImagen = public_path('img/plazas/' . $idPlaza . '.jpg'); // Suponemos que las imágenes son archivos JPG
+        if (!file_exists($rutaImagen)) {
             // Obtener el contenido de la imagen por defecto
-            $rutaImagen = 'storage/img/plazas/default.jpg';
+            $rutaImagen = public_path('img/plazas/default.jpg');
         }
         //Consulta de las plazas 
         $databaseName1 = 'kpis';

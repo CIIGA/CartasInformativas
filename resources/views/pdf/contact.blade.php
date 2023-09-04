@@ -25,7 +25,7 @@
 
 <body>
     <header>
-        <img class="imgHeader1" src="{{ asset('storage/img/plazas/default.jpg') }}">
+        <img class="imgHeader1" src="{{ asset('img/plazas/default.jpg') }}">
         <p class="infoHeader">
             <span class="bold">
                 Informe de Programa:
@@ -33,7 +33,7 @@
             <br />
             Contact Center
         </p>
-        <img class="imgHeader2" src="{{ asset($rutaImagen) }}">
+        <img class="imgHeader2" src="{{ asset('img/plazas/'.$rutaImagen.'.jpg') }}">
     </header>
     <main>
         <div class="column_1">

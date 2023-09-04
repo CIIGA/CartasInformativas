@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
+
     // Cuando el usuario selecciona una opción del combobox
     $("#combobox").change(function () {
         var plazaId = $(this).val();
@@ -9,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     $("#formSubirArchivos").submit(function (e) {
         e.preventDefault(); // Evitar el envío automático del formulario
 
+       
         // Obtener el ID de la plaza seleccionada
         var plazaId = $("#combobox").val();
 
@@ -25,10 +27,11 @@ document.addEventListener("DOMContentLoaded", function () {
             success: function (response) {
                 // Mostrar la alerta de éxito con el mensaje de la respuesta
                 mostrarAlerta('success', response.success);
+                
             },
             error: function (xhr, status, error) {
                 // Mostrar la alerta de error con el mensaje de la respuesta
-                mostrarAlerta('error', xhr.responseJSON.error);
+                mostrarAlerta('error', response.error);
             }
         });
     });
