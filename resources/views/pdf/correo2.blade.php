@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Correo</title>
-    <link href="C:/wamp64/www/CartasInformativas/public/css/pdf.css" rel="stylesheet">
+    <link href="https://<?php echo $_SERVER['HTTP_HOST']; ?>/implementta/modulos/CartasInformativas/public/css/pdf.css" rel="stylesheet">
 </head>
 
 <body>
