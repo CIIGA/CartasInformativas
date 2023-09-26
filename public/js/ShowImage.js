@@ -4,7 +4,7 @@ $(document).ready(function () {
         var plazaId = $(this).val();
         // Realizar la petición AJAX para obtener la lista de archivos de la plaza
         $.ajax({
-            url: "/plazas/" + plazaId + "/imagen", // Ruta de la función obtenerImagenPlaza del controlador
+            url: "/plazas/" + plazaId + "/imagen", // Ruta de la función obtenerImagenPlaza del controlador con ajax
             type: "GET",
             xhrFields: {
                 responseType: 'blob' // Indicar que esperamos una respuesta en formato binario (imagen)
