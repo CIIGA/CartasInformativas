@@ -9,7 +9,7 @@
                 <input name="fechaI" type="date" id="fechaI" class="form-control form-control-sm  
                 @error('fechaI')
                 border border-danger rounded-2
-                @enderror" />
+                @enderror" required/>
                 @error('fechaI')
                 <div class="text-danger text-center">
                     {{$message}}
@@ -23,7 +23,7 @@
                 <input name="fechaf" type="date" id="fechaf" class="form-control form-control-sm 
                 @error('fechaf')
                 border border-danger rounded-2
-                @enderror" />
+                @enderror" required/>
                 @error('fechaf')
                 <div class="text-danger text-center">
                     {{$message}}

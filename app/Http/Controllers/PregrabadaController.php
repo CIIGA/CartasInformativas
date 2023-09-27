@@ -34,13 +34,32 @@ class PregrabadaController extends Controller
         $exec = DB::connection('dynamic')->select("exec sp_profile_operation_t25 ?, ?, ?", array($fechaI, $fechaF, 1));
         //si se ejecuta el procedimiento mandamos a llamar a la funcion index
         DB::disconnect('dynamic');
-        if ($exec) {
+        if ($exec[0]->resultado == 1) {
             // return $this->pdfPregabadas($idPlaza, $plaza, $fechaF);
+            $anio = anio($fechaF);
+        $mes = mes($fechaF);
+            $databaseName3 = 'kpimplementta';
+            $connection3 = DatabaseUtils::getDynamicConnection($databaseName3);
+            $tabla1Pregrabada = DB::connection('dynamic')->select("select sum(cantidad) as c
+            from [kpimplementta].[dbo].[profile_operation_t25] where 
+            plaza = ? and numero = ? and año = ? and 
+            tipo='Pregrabadas' and tabla ='1. General'", [$plaza, $mes, $anio]);
+            DB::disconnect('dynamic');
 
-            return '<script type="text/javascript">window.open("pdfPregabadas/' . $idPlaza . '/'.$plaza.'/'.$fechaF.'")</script>' .
-                redirect()->action(
-                    [IndexController::class, 'index']
-                );
+            if ($tabla1Pregrabada[0]->c == null) {
+                return back()->with('error', 'No hay información en este rango de fechas.');
+            }else{
+                if ($tabla1Pregrabada[0]->c !=0) {
+                    return '<script type="text/javascript">window.open("pdfPregabadas/' . $idPlaza . '/'.$plaza.'/'.$fechaF.'")</script>' .
+                    redirect()->action(
+                        [IndexController::class, 'index']
+                    );
+                }else{
+                    return back()->with('error', 'No hay pregrabadas validas en este rango de fechas.');
+                }
+            }
+        }else{
+            return back()->with('error', 'Error al ejecutar el proceso, intente de nuevo y si el problema persiste comuniquese con soporte');
         }
     }
     public function pdfPregabadas($idPlaza, $plaza, $fechaF)
@@ -54,7 +73,7 @@ class PregrabadaController extends Controller
         if (!file_exists($rutaImagen)) {
             // return response()->json(['error' => 'No se encontró la imagen para la plaza seleccionada.'], 404);
             // Obtener el contenido de la imagen por defecto
-            $imagen = 'default';
+            $rutaImagen = public_path('img/plazas/default.jpg');
         }
         //Tabla 1 
         $anio = anio($fechaF);

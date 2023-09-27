@@ -60,9 +60,9 @@ class ArchivoController extends Controller
             
                 // Verificar si el archivo se ha guardado correctamente
                 if (file_exists($rutaArchivo) && is_file($rutaArchivo)) {
-                    return redirect()->action([IndexController::class, 'index'])->with('subirImagen', 'success');
+                    // return redirect()->action([IndexController::class, 'index'])->with('subirImagen', 'success');
 
-                    // return response()->json(['success' => 'Archivo subido y guardado correctamente.']);
+                    return response()->json(['success' => 'Archivo subido y guardado correctamente.']);
                 } else {
                     return response()->json(['error' => 'No se pudo guardar el archivo correctamente.'], 500);
                 }

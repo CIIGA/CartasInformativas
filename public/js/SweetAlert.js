@@ -18,7 +18,6 @@ function mostrarAlerta(tipo, mensaje) {
         icon: icono,
         title: titulo,
         text: mensaje,
-        showConfirmButton: false,
-        timer: 1500,
+        showConfirmButton: true,
     });
 }

@@ -107,8 +107,8 @@ Inicio
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('guardar_archivos') }}" method="POST" enctype="multipart/form-data"
-                    id="formSubirArchivos">
+                <form enctype="multipart/form-data" id="formSubirArchivos">
+                {{-- <form action="{{ route('guardar_archivos') }}" method="POST" enctype="multipart/form-data" id="formSubirArchivos"> --}}
                     @csrf
                     <!-- Campo oculto para enviar el valor del combobox seleccionado -->
                     <input type="hidden" id="plazaId" name="plaza_id" value="">
@@ -116,12 +116,12 @@ Inicio
                     <!-- Campo de archivo de Bootstrap 5 -->
                     <div class="mb-3">
                         <label for="archivo" class="form-label">Selecciona un archivo:</label>
-                        <input type="file" class="form-control" id="archivo" name="archivo">
+                        <input type="file" class="form-control" id="archivo" name="archivo" accept=".jpg">
                         <div class="bg-danger text-white text-center">
                             <p>Solo formatos .jpg</p>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-save" id="btnSubirArchivos">Guardar</button>
+                    <button type="button" class="btn btn-save" id="btnSubirArchivos">Guardar</button>
                 </form>
             </div>
         </div>

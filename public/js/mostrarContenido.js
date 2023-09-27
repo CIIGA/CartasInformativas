@@ -7,7 +7,7 @@ function mostrarOcultarContenido() {
     const contenido = document.getElementById('content');
 
     // Verificamos si se ha seleccionado una plaza (valor diferente de vacío)
-    if (selectedValue !== '') {
+    if (selectedValue != '') {
         // Verificamos si se ha seleccionado la plaza "Mexicali" (valor "2023")
         // Obtenemos el contenedor del campaña de correos 
         const correos = document.getElementById('correos');
