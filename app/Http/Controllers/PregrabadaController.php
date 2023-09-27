@@ -37,7 +37,7 @@ class PregrabadaController extends Controller
         if ($exec[0]->resultado == 1) {
             // return $this->pdfPregabadas($idPlaza, $plaza, $fechaF);
             $anio = anio($fechaF);
-        $mes = mes($fechaF);
+            $mes = mes($fechaF);
             $databaseName3 = 'kpimplementta';
             $connection3 = DatabaseUtils::getDynamicConnection($databaseName3);
             $tabla1Pregrabada = DB::connection('dynamic')->select("select sum(cantidad) as c
@@ -48,17 +48,17 @@ class PregrabadaController extends Controller
 
             if ($tabla1Pregrabada[0]->c == null) {
                 return back()->with('error', 'No hay información en este rango de fechas.');
-            }else{
-                if ($tabla1Pregrabada[0]->c !=0) {
-                    return '<script type="text/javascript">window.open("pdfPregabadas/' . $idPlaza . '/'.$plaza.'/'.$fechaF.'")</script>' .
-                    redirect()->action(
-                        [IndexController::class, 'index']
-                    );
-                }else{
+            } else {
+                if ($tabla1Pregrabada[0]->c != 0) {
+                    return '<script type="text/javascript">window.open("pdfPregabadas/' . $idPlaza . '/' . $plaza . '/' . $fechaF . '")</script>' .
+                        redirect()->action(
+                            [IndexController::class, 'index']
+                        );
+                } else {
                     return back()->with('error', 'No hay pregrabadas validas en este rango de fechas.');
                 }
             }
-        }else{
+        } else {
             return back()->with('error', 'Error al ejecutar el proceso, intente de nuevo y si el problema persiste comuniquese con soporte');
         }
     }
@@ -69,7 +69,7 @@ class PregrabadaController extends Controller
         //Ruta imagen del reporte 
         // Verificar si existe la imagen de la plaza
         $rutaImagen = public_path('img/plazas/' . $idPlaza . '.jpg'); // Suponemos que las imágenes son archivos JPG
-        $imagen=$idPlaza;
+        $imagen = $idPlaza;
         if (!file_exists($rutaImagen)) {
             // return response()->json(['error' => 'No se encontró la imagen para la plaza seleccionada.'], 404);
             // Obtener el contenido de la imagen por defecto
@@ -84,39 +84,34 @@ class PregrabadaController extends Controller
         from [kpimplementta].[dbo].[profile_operation_t25] where 
         plaza = ? and numero = ? and año = ? and 
         tipo='Pregrabadas' and tabla ='1. General' group by concepto", [$plaza, $mes, $anio]);
-        DB::disconnect('dynamic');
-        if ($tabla1Pregrabada == null) {
-            return back()->with('error', 'No hay informacion.');
+
+        $totalGeneral = DB::connection('dynamic')->select("select sum(cantidad) as total
+        from [kpimplementta].[dbo].[profile_operation_t25] where 
+        plaza = ? and numero = ? and año = ? and 
+        tipo='Pregrabadas' and tabla ='1. General'", [$plaza, $mes, $anio]);
+        
+        $general=0;
+        foreach ($tabla1Pregrabada as $item) {
+            $general++;
         }
-        $cantidad1 =  $tabla1Pregrabada[0]->cantidad;
-        $cantidad2 = $tabla1Pregrabada[1]->cantidad;
-        $total1 = $cantidad1 + $cantidad2;
-        $result1 = ($cantidad1 / $total1) * 100;
-        $result2 = ($cantidad2 / $total1) * 100;
-        $result1 = redondearNumero($result1);
-        $result2 = redondearNumero($result2);
         //Tabla 2
         $tabla2Pregrabada = DB::connection('dynamic')->select("select concepto, sum(cantidad) as cantidad  
         from [kpimplementta].[dbo].[profile_operation_t25] where 
         plaza = ? and numero =? and año = ? and 
         tipo='Pregrabadas' and tabla ='2. Desglose' group by concepto", [$plaza, $mes, $anio]);
+
+        $totalDesglose = DB::connection('dynamic')->select("select sum(cantidad) as total  
+        from [kpimplementta].[dbo].[profile_operation_t25] where 
+        plaza = ? and numero =? and año = ? and 
+        tipo='Pregrabadas' and tabla ='2. Desglose'", [$plaza, $mes, $anio]);
+        
+        $Desglose=0;
+        foreach ($tabla2Pregrabada as $item) {
+            $Desglose++;
+        }
+
         DB::disconnect('dynamic');
-        $cantidad11 =  $tabla2Pregrabada[0]->cantidad;
-        $cantidad22 = $tabla2Pregrabada[1]->cantidad;
-        $cantidad33 =  $tabla2Pregrabada[2]->cantidad;
-        $cantidad44 = $tabla2Pregrabada[3]->cantidad;
-        $total22 = $cantidad11 +
-            $cantidad22 +
-            $cantidad33 +
-            $cantidad44;
-        $result11 = ($cantidad11 / $total22) * 100;
-        $result22 = ($cantidad22 / $total22) * 100;
-        $result33 = ($cantidad33 / $total22) * 100;
-        $result44 = ($cantidad44 / $total22) * 100;
-        $result11 = redondearNumero($result11);
-        $result22 = redondearNumero($result22);
-        $result33 = redondearNumero($result33);
-        $result44 = redondearNumero($result44);
+        
         //Nombre de la plaza 
         $nombre = extraerPrimeraPalabra($plaza);
         //Formato de fecha formateada
@@ -127,14 +122,11 @@ class PregrabadaController extends Controller
             [
                 'tabla1Pregrabada' => $tabla1Pregrabada,
                 'tabla2Pregrabada' => $tabla2Pregrabada,
-                'result1' => $result1,
-                'result2' => $result2,
-                'total1' => $total1,
-                'result11' => $result11,
-                'result22' => $result22,
-                'result33' => $result33,
-                'result44' => $result44,
-                'total22' => $total22,
+                'totalGeneral' => $totalGeneral[0]->total,
+                'general' => $general,
+                'totalDesglose' => $totalDesglose[0]->total,
+                'Desglose' => $Desglose,
+                
                 'rutaImagen' => $imagen,
                 //Nombre plaza 
                 'nombre' => $nombre,
@@ -150,11 +142,11 @@ class PregrabadaController extends Controller
     {
         ini_set('max_execution_time', 0);
         ini_set('memory_limit', '-1');
-        $fechaF= $request->fechaF;
-        $plaza= $request->plaza;
-        $idPlaza= $request->idPlaza;
-        $imagenContestadas= $request->imagenContestadas;
-        $imagenSeguimiento= $request->imagenSeguimiento;
+        $fechaF = $request->fechaF;
+        $plaza = $request->plaza;
+        $idPlaza = $request->idPlaza;
+        $imagenContestadas = $request->imagenContestadas;
+        $imagenSeguimiento = $request->imagenSeguimiento;
         //Ruta imagen del reporte 
         // Verificar si existe la imagen de la plaza
         $rutaImagen = public_path('img/plazas/' . $idPlaza . '.jpg'); // Suponemos que las imágenes son archivos JPG
@@ -172,64 +164,45 @@ class PregrabadaController extends Controller
         from [kpimplementta].[dbo].[profile_operation_t25] where 
         plaza = ? and numero = ? and año = ? and 
         tipo='Pregrabadas' and tabla ='1. General' group by concepto", [$plaza, $mes, $anio]);
+
+        $totalGeneral = DB::connection('dynamic')->select("select sum(cantidad) as total
+        from [kpimplementta].[dbo].[profile_operation_t25] where 
+        plaza = ? and numero = ? and año = ? and 
+        tipo='Pregrabadas' and tabla ='1. General'", [$plaza, $mes, $anio]);
         DB::disconnect('dynamic');
-        if ($tabla1Pregrabada == null) {
-            return back()->with('error', 'No hay informacion.');
-        }
-        $cantidad1 =  $tabla1Pregrabada[0]->cantidad;
-        $cantidad2 = $tabla1Pregrabada[1]->cantidad;
-        $total1 = $cantidad1 + $cantidad2;
-        $result1 = ($cantidad1 / $total1) * 100;
-        $result2 = ($cantidad2 / $total1) * 100;
-        $result1 = redondearNumero($result1);
-        $result2 = redondearNumero($result2);
+       
+        
         //Tabla 2
         $tabla2Pregrabada = DB::connection('dynamic')->select("select concepto, sum(cantidad) as cantidad  
         from [kpimplementta].[dbo].[profile_operation_t25] where 
         plaza = ? and numero =? and año = ? and 
         tipo='Pregrabadas' and tabla ='2. Desglose' group by concepto", [$plaza, $mes, $anio]);
+
+        $totalDesglose = DB::connection('dynamic')->select("select sum(cantidad) as total  
+        from [kpimplementta].[dbo].[profile_operation_t25] where 
+        plaza = ? and numero =? and año = ? and 
+        tipo='Pregrabadas' and tabla ='2. Desglose'", [$plaza, $mes, $anio]);
         DB::disconnect('dynamic');
-        $cantidad11 =  $tabla2Pregrabada[0]->cantidad;
-        $cantidad22 = $tabla2Pregrabada[1]->cantidad;
-        $cantidad33 =  $tabla2Pregrabada[2]->cantidad;
-        $cantidad44 = $tabla2Pregrabada[3]->cantidad;
-        $total22 = $cantidad11 +
-            $cantidad22 +
-            $cantidad33 +
-            $cantidad44;
-        $result11 = ($cantidad11 / $total22) * 100;
-        $result22 = ($cantidad22 / $total22) * 100;
-        $result33 = ($cantidad33 / $total22) * 100;
-        $result44 = ($cantidad44 / $total22) * 100;
-        $result11 = redondearNumero($result11);
-        $result22 = redondearNumero($result22);
-        $result33 = redondearNumero($result33);
-        $result44 = redondearNumero($result44);
+      
         //Nombre de la plaza 
         $nombre = extraerPrimeraPalabra($plaza);
-          //Formato de fecha formateada
-          $fechaFormateada = fechaReporte(0, $fechaF);
+        //Formato de fecha formateada
+        $fechaFormateada = fechaReporte(0, $fechaF);
         //declaramos la variable pdf y mandamos los parametros
         $pdf = Pdf::loadView(
             'pdf.pregrabadas2',
             [
                 'tabla1Pregrabada' => $tabla1Pregrabada,
                 'tabla2Pregrabada' => $tabla2Pregrabada,
-                'result1' => $result1,
-                'result2' => $result2,
-                'total1' => $total1,
-                'result11' => $result11,
-                'result22' => $result22,
-                'result33' => $result33,
-                'result44' => $result44,
-                'total22' => $total22,
+                'totalGeneral' => $totalGeneral[0]->total,
+                'totalDesglose' => $totalDesglose[0]->total,
                 'rutaImagen' => $rutaImagen,
                 //Nombre plaza 
                 'nombre' => $nombre,
                 //Fecha Formateada
-                'fechaFormateada'=>$fechaFormateada,
-                'imagenSeguimiento'=>$imagenSeguimiento,
-                'imagenContestadas'=>$imagenContestadas,
+                'fechaFormateada' => $fechaFormateada,
+                'imagenSeguimiento' => $imagenSeguimiento,
+                'imagenContestadas' => $imagenContestadas,
             ]
         );
         return $pdf->stream();

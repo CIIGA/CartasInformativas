@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>ContactCenter</title>
-    <link href="https://<?php echo $_SERVER['HTTP_HOST']; ?>/implementta/modulos/CartasInformativas/public/css/pdf.css" rel="stylesheet">
+    <link href="C:/wamp64/www/CartasInformativas/public/css/pdf.css" rel="stylesheet">
+    {{-- <link href="https://<?php echo $_SERVER['HTTP_HOST']; ?>/implementta/modulos/CartasInformativas/public/css/pdf.css" rel="stylesheet"> --}}
     <style>
         .row {
             position: static;
@@ -86,21 +87,13 @@
                     <tr>
                         <th colspan="3">Efectividad de Llamadas</th>
                     </tr>
+                    @foreach ($tabla1General as $item)
                     <tr>
-                        <td>{{$tabla1General[0]->concepto}}</td>
-                        <td>{{$tabla1General[0]->cantidad}}</td>
-                        <td>{{$result1General}}%</td>
+                        <td>{{ $item->concepto }}</td>
+                        <td>{{ $item->cantidad }}</td>
+                        <td>{{ round(($item->cantidad / $totalGeneral) * 100, 2) }}%</td>
                     </tr>
-                    <tr>
-                        <td>{{$tabla1General[1]->concepto}}</td>
-                        <td>{{$tabla1General[1]->cantidad}}</td>
-                        <td>{{$result2General}}%</td>
-                    </tr>
-                    <tr>
-                        <td>{{$tabla1General[2]->concepto}}</td>
-                        <td>{{$tabla1General[2]->cantidad}}</td>
-                        <td>{{$result3General}}%</td>
-                    </tr>
+                @endforeach
                     <tr>
                         <td>Total</td>
                         <td>{{$totalGeneral}}</td>
@@ -119,16 +112,13 @@
                     <tr>
                         <th colspan="3">Desglose llamadas depuradas</th>
                     </tr>
+                    @foreach ($tabla2Depuracion as $item)
                     <tr>
-                        <td>{{$tabla2Depuracion[0]->concepto}}</td>
-                        <td>{{$tabla2Depuracion[0]->cantidad}}</td>
-                        <td>{{$result1Depuracion}}%</td>
+                        <td>{{ $item->concepto }}</td>
+                        <td>{{ $item->cantidad }}</td>
+                        <td>{{ round(($item->cantidad / $totalDepuracion) * 100, 2) }}%</td>
                     </tr>
-                    <tr>
-                        <td>{{$tabla2Depuracion[1]->concepto}}</td>
-                        <td>{{$tabla2Depuracion[1]->cantidad}}</td>
-                        <td>{{$result2Depuracion}}%</td>
-                    </tr>
+                @endforeach
                     <tr>
                         <td>Total</td>
                         <td>{{$totalDepuracion}}</td>
@@ -147,26 +137,13 @@
                     <tr>
                         <th colspan="3">Desglose llamadas Contestadas</th>
                     </tr>
-                    <tr>
-                        <td>{{$tabla3Contestadas[0]->concepto}}</td>
-                        <td>{{$tabla3Contestadas[0]->cantidad}}</td>
-                        <td>{{$result1Contestadas}}%</td>
-                    </tr>
-                    <tr>
-                        <td>{{$tabla3Contestadas[1]->concepto}}</td>
-                        <td>{{$tabla3Contestadas[1]->cantidad}}</td>
-                        <td>{{$result2Contestadas}}%</td>
-                    </tr>
-                    <tr>
-                        <td>{{$tabla3Contestadas[2]->concepto}}</td>
-                        <td>{{$tabla3Contestadas[2]->cantidad}}</td>
-                        <td>{{$result3Contestadas}}%</td>
-                    </tr>
-                    <tr>
-                        <td>{{$tabla3Contestadas[3]->concepto}}</td>
-                        <td>{{$tabla3Contestadas[3]->cantidad}}</td>
-                        <td>{{$result4Contestadas}}%</td>
-                    </tr>
+                    @foreach ($tabla3Contestadas as $item)
+                        <tr>
+                            <td>{{ $item->concepto }}</td>
+                            <td>{{ $item->cantidad }}</td>
+                            <td>{{ round(($item->cantidad / $totalContestadas) * 100, 2) }}%</td>
+                        </tr>
+                    @endforeach
                     <tr>
                         <td>Total</td>
                         <td>{{$totalContestadas}}</td>
@@ -185,26 +162,13 @@
                     <tr>
                         <th colspan="3">Desglose seguimiento de llamada</th>
                     </tr>
+                    @foreach ($tabla4Seguimiento as $item)
                     <tr>
-                        <td>{{$tabla4Seguimiento[0]->concepto}}</td>
-                        <td>{{$tabla4Seguimiento[0]->cantidad}}</td>
-                        <td>{{$result1Seguimiento}}%</td>
+                        <td>{{ $item->concepto }}</td>
+                        <td>{{ $item->cantidad }}</td>
+                        <td>{{ round(($item->cantidad / $totalSeguimiento) * 100, 2) }}%</td>
                     </tr>
-                    <tr>
-                        <td>{{$tabla4Seguimiento[1]->concepto}}</td>
-                        <td>{{$tabla4Seguimiento[1]->cantidad}}</td>
-                        <td>{{$result2Seguimiento}}%</td>
-                    </tr>
-                    <tr>
-                        <td>{{$tabla4Seguimiento[2]->concepto}}</td>
-                        <td>{{$tabla4Seguimiento[2]->cantidad}}</td>
-                        <td>{{$result3Seguimiento}}%</td>
-                    </tr>
-                    <tr>
-                        <td>{{$tabla4Seguimiento[3]->concepto}}</td>
-                        <td>{{$tabla4Seguimiento[3]->cantidad}}</td>
-                        <td>{{$result4Seguimiento}}%</td>
-                    </tr>
+                @endforeach
                     <tr>
                         <td>Total</td>
                         <td>{{$totalSeguimiento}}</td>

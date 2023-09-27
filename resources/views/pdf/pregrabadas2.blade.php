@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Pregrabada</title>
-    <link href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/CartasInformativas/public/css/pdf.css" rel="stylesheet">
+    <link href="C:/wamp64/www/CartasInformativas/public/css/pdf.css" rel="stylesheet">
     {{-- <link href="https://<?php echo $_SERVER['HTTP_HOST']; ?>/implementta/modulos/CartasInformativas/public/css/pdf.css" rel="stylesheet">Toluca Predial --}}
     <style>
         .row {
@@ -77,18 +77,16 @@
                     <td>%</td>
                 </tr>
                 <tr>
-                    <td>{{$tabla1Pregrabada[0]->concepto}}</td>
-                    <td>{{$tabla1Pregrabada[0]->cantidad}}</td>
-                    <td>{{$result1}}</td>
-                </tr>
-                <tr>
-                    <td>{{$tabla1Pregrabada[1]->concepto}}</td>
-                    <td>{{$tabla1Pregrabada[1]->cantidad}}</td>
-                    <td>{{$result2}}</td>
-                </tr>
+                    @foreach ($tabla1Pregrabada as $item)
+                    <tr>
+                        <td>{{ $item->concepto }}</td>
+                        <td>{{ $item->cantidad }}</td>
+                        <td>{{ round(($item->cantidad / $totalGeneral) * 100,2) }}</td>
+                    </tr>
+                @endforeach
                 <tr>
                     <td>Total</td>
-                    <td>{{$total1}}</td>
+                    <td>{{ $totalGeneral }}</td>
                     <td>100</td>
                 </tr>
             </tbody>
@@ -104,31 +102,18 @@
                     <td>Cantidad</td>
                     <td>%</td>
                 </tr>
+                @foreach ($tabla2Pregrabada as $item)
                 <tr>
-                    <td>{{$tabla2Pregrabada[0]->concepto}}</td>
-                    <td>{{$tabla2Pregrabada[0]->cantidad}}</td>
-                    <td>{{$result11}}</td>
+                    <td>{{ $item->concepto }}</td>
+                    <td>{{ $item->cantidad }}</td>
+                    <td>{{ round(($item->cantidad / $totalDesglose) * 100,2) }}</td>
                 </tr>
-                <tr>
-                    <td>{{$tabla2Pregrabada[1]->concepto}}</td>
-                    <td>{{$tabla2Pregrabada[1]->cantidad}}</td>
-                    <td>{{$result22}}</td>
-                </tr>
-                <tr>
-                    <td>{{$tabla2Pregrabada[2]->concepto}}</td>
-                    <td>{{$tabla2Pregrabada[2]->cantidad}}</td>
-                    <td>{{$result33}}</td>
-                </tr>
-                <tr>
-                    <td>{{$tabla2Pregrabada[3]->concepto}}</td>
-                    <td>{{$tabla2Pregrabada[3]->cantidad}}</td>
-                    <td>{{$result44}}</td>
-                </tr>
-                <tr>
-                    <td>Total</td>
-                    <td>{{$total22}}</td>
-                    <td>100</td>
-                </tr>
+            @endforeach
+            <tr>
+                <td>Total</td>
+                <td>{{ $totalDesglose }}</td>
+                <td>100</td>
+            </tr>
             </tbody>
         </table>
         <br />

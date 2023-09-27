@@ -33,7 +33,7 @@
             <br />
             Contact Center
         </p>
-        <img class="imgHeader2" src="{{ asset('img/plazas/'.$rutaImagen.'.jpg') }}">
+        <img class="imgHeader2" src="{{ asset('img/plazas/' . $rutaImagen . '.jpg') }}">
     </header>
     <main>
         <div class="column_1">
@@ -44,13 +44,13 @@
                 Notificacion de adeudo en su cuenta de agua
             </p>
             <p class="bold">
-                COMISIÓN ESTATAL DE SERVICIOS PÚBLICOS DE {{$nombre}}
+                COMISIÓN ESTATAL DE SERVICIOS PÚBLICOS DE {{ $nombre }}
             </p>
             <p>
                 <span class="bold">
                     Periodo:
                 </span>
-                {{$fechaFormateada}}
+                {{ $fechaFormateada }}
             </p>
             <p>
                 <span class="bold">
@@ -63,25 +63,17 @@
                     <tr>
                         <th colspan="3">Efectividad de Llamadas</th>
                     </tr>
-                    <tr>
-                        <td>{{$tabla1General[0]->concepto}}</td>
-                        <td>{{$tabla1General[0]->cantidad}}</td>
-                        <td>{{$result1General}}</td>
-                    </tr>
-                    <tr>
-                        <td>{{$tabla1General[1]->concepto}}</td>
-                        <td>{{$tabla1General[1]->cantidad}}</td>
-                        <td>{{$result2General}}</td>
-                    </tr>
-                    <tr>
-                        <td>{{$tabla1General[2]->concepto}}</td>
-                        <td>{{$tabla1General[2]->cantidad}}</td>
-                        <td>{{$result3General}}</td>
-                    </tr>
+                    @foreach ($tabla1General as $item)
+                        <tr>
+                            <td>{{ $item->concepto }}</td>
+                            <td>{{ $item->cantidad }}</td>
+                            <td>{{ round(($item->cantidad / $totalGeneral) * 100, 2) }}%</td>
+                        </tr>
+                    @endforeach
                     <tr>
                         <td>Total</td>
-                        <td>{{$totalGeneral}}</td>
-                        <td>100</td>
+                        <td>{{ $totalGeneral }}</td>
+                        <td>100%</td>
                     </tr>
                 </tbody>
             </table>
@@ -91,19 +83,16 @@
                     <tr>
                         <th colspan="3">Desglose llamadas depuradas</th>
                     </tr>
-                    <tr>
-                        <td>{{$tabla2Depuracion[0]->concepto}}</td>
-                        <td>{{$tabla2Depuracion[0]->cantidad}}</td>
-                        <td>{{$result1Depuracion}}%</td>
-                    </tr>
-                    <tr>
-                        <td>{{$tabla2Depuracion[1]->concepto}}</td>
-                        <td>{{$tabla2Depuracion[1]->cantidad}}</td>
-                        <td>{{$result2Depuracion}}%</td>
-                    </tr>
+                    @foreach ($tabla2Depuracion as $item)
+                        <tr>
+                            <td>{{ $item->concepto }}</td>
+                            <td>{{ $item->cantidad }}</td>
+                            <td>{{ round(($item->cantidad / $totalDepuracion) * 100, 2) }}%</td>
+                        </tr>
+                    @endforeach
                     <tr>
                         <td>Total</td>
-                        <td>{{$totalDepuracion}}</td>
+                        <td>{{ $totalDepuracion }}</td>
                         <td>100%</td>
                     </tr>
                 </tbody>
@@ -114,29 +103,16 @@
                     <tr>
                         <th colspan="3">Desglose llamadas Contestadas</th>
                     </tr>
-                    <tr>
-                        <td>{{$tabla3Contestadas[0]->concepto}}</td>
-                        <td>{{$tabla3Contestadas[0]->cantidad}}</td>
-                        <td>{{$result1Contestadas}}%</td>
-                    </tr>
-                    <tr>
-                        <td>{{$tabla3Contestadas[1]->concepto}}</td>
-                        <td>{{$tabla3Contestadas[1]->cantidad}}</td>
-                        <td>{{$result2Contestadas}}%</td>
-                    </tr>
-                    <tr>
-                        <td>{{$tabla3Contestadas[2]->concepto}}</td>
-                        <td>{{$tabla3Contestadas[2]->cantidad}}</td>
-                        <td>{{$result3Contestadas}}%</td>
-                    </tr>
-                    <tr>
-                        <td>{{$tabla3Contestadas[3]->concepto}}</td>
-                        <td>{{$tabla3Contestadas[3]->cantidad}}</td>
-                        <td>{{$result4Contestadas}}%</td>
-                    </tr>
+                    @foreach ($tabla3Contestadas as $item)
+                        <tr>
+                            <td>{{ $item->concepto }}</td>
+                            <td>{{ $item->cantidad }}</td>
+                            <td>{{ round(($item->cantidad / $totalContestadas) * 100, 2) }}%</td>
+                        </tr>
+                    @endforeach
                     <tr>
                         <td>Total</td>
-                        <td>{{$totalContestadas}}</td>
+                        <td>{{ $totalContestadas }}</td>
                         <td>100%</td>
                     </tr>
                 </tbody>
@@ -147,29 +123,16 @@
                     <tr>
                         <th colspan="3">Desglose seguimiento de llamada</th>
                     </tr>
-                    <tr>
-                        <td>{{$tabla4Seguimiento[0]->concepto}}</td>
-                        <td>{{$tabla4Seguimiento[0]->cantidad}}</td>
-                        <td>{{$result1Seguimiento}}%</td>
-                    </tr>
-                    <tr>
-                        <td>{{$tabla4Seguimiento[1]->concepto}}</td>
-                        <td>{{$tabla4Seguimiento[1]->cantidad}}</td>
-                        <td>{{$result2Seguimiento}}%</td>
-                    </tr>
-                    <tr>
-                        <td>{{$tabla4Seguimiento[2]->concepto}}</td>
-                        <td>{{$tabla4Seguimiento[2]->cantidad}}</td>
-                        <td>{{$result3Seguimiento}}%</td>
-                    </tr>
-                    <tr>
-                        <td>{{$tabla4Seguimiento[3]->concepto}}</td>
-                        <td>{{$tabla4Seguimiento[3]->cantidad}}</td>
-                        <td>{{$result4Seguimiento}}%</td>
-                    </tr>
+                    @foreach ($tabla4Seguimiento as $item)
+                        <tr>
+                            <td>{{ $item->concepto }}</td>
+                            <td>{{ $item->cantidad }}</td>
+                            <td>{{ round(($item->cantidad / $totalSeguimiento) * 100, 2) }}%</td>
+                        </tr>
+                    @endforeach
                     <tr>
                         <td>Total</td>
-                        <td>{{$totalSeguimiento}}</td>
+                        <td>{{ $totalSeguimiento }}</td>
                         <td>100%</td>
                     </tr>
                 </tbody>
@@ -184,22 +147,24 @@
         </div>
     </main>
     <div align="center">
-        <form method="post"  action="{{ route('GenerarPDFContact') }}">
+        <form method="post" action="{{ route('GenerarPDFContact') }}">
             @csrf
             <input type="hidden" id="imagenLlamadas" name="imagenLlamadas" />
             <input type="hidden" id="imagenDesglose" name="imagenDesglose" />
             <input type="hidden" id="imagenContestadas" name="imagenContestadas" />
             <input type="hidden" id="imagenSeguimiento" name="imagenSeguimiento" />
-            <input type="hidden" id="fechaF" name="fechaF" value="{{$fechaF}}" />
-            <input type="hidden" id="plaza" name="plaza" value="{{$plaza}}" />
-            <input type="hidden" id="idPlaza" name="idPlaza" value="{{$idPlaza}}" />
+            <input type="hidden" id="fechaF" name="fechaF" value="{{ $fechaF }}" />
+            <input type="hidden" id="plaza" name="plaza" value="{{ $plaza }}" />
+            <input type="hidden" id="idPlaza" name="idPlaza" value="{{ $idPlaza }}" />
             <button type="submit" id="create_pdf" class="btn btn-success">Generar PDF</button>
         </form>
     </div>
     {{-- Efectividad de llamadas --}}
     <script type="text/javascript">
-        function generatePieChart(labels, values,title) {
-            google.charts.load('current', { 'packages': ['corechart'] });
+        function generatePieChart(labels, values, title) {
+            google.charts.load('current', {
+                'packages': ['corechart']
+            });
             google.charts.setOnLoadCallback(drawChart);
 
             function drawChart() {
@@ -213,30 +178,45 @@
                 var options = {
                     title: title,
                     pieHole: 0.4,
-                    chartArea: { left: 100, top: 70, width: '100%', height: '80%' },
-                    colors: ['#76A646', '#457ABF','#F29F05'] // Personalizar los colores aquí
+                    chartArea: {
+                        left: 100,
+                        top: 70,
+                        width: '100%',
+                        height: '80%'
+                    },
+                    colors: ['#76A646', '#457ABF', '#F29F05'] // Personalizar los colores aquí
                 };
 
                 var chart = new google.visualization.PieChart(document.getElementById('piechart'));
                 chart.draw(data, options);
-                 // Obtener la URL de la imagen generada
+                // Obtener la URL de la imagen generada
                 var imageUrl = chart.getImageURI();
-               // Obtén una referencia a la imagen por su id
+                // Obtén una referencia a la imagen por su id
                 var imagen = document.getElementById('imagenLlamadas');
                 // Asigna un valor a la imagen
                 imagen.value = imageUrl;
             }
         }
+        var etiquetas = [];
+        var tabla1General = @json($tabla1General); // Convierte el array PHP en un objeto JavaScript
+        @for ($i = 0; $i < $General; $i++)
+            etiquetas.push('{{ $tabla1General[$i]->concepto }}');
+        @endfor
 
+        var valores = [];
+        @for ($i = 0; $i < $General; $i++)
+            valores.push({{ ($tabla1General[$i]->cantidad / $totalGeneral) * 100 }});
+        @endfor
         // Llamar a la función generadora de gráficos
-        var etiquetas = ['{{$tabla1General[0]->concepto}}',' {{$tabla1General[1]->concepto}}','{{$tabla1General[2]->concepto}}'];
-        var valores = [{{$result1General}}, {{$result2General}},{{$result3General}}];
-        generatePieChart(etiquetas, valores,'Efectividad de llamadas');
+        
+        generatePieChart(etiquetas, valores, 'Efectividad de llamadas');
     </script>
     {{-- Desglose de llamadas depuradas --}}
     <script type="text/javascript">
-        function generatePieChart(labels, values,title) {
-            google.charts.load('current', { 'packages': ['corechart'] });
+        function generatePieChart(labels, values, title) {
+            google.charts.load('current', {
+                'packages': ['corechart']
+            });
             google.charts.setOnLoadCallback(drawChart);
 
             function drawChart() {
@@ -250,30 +230,44 @@
                 var options = {
                     title: title,
                     pieHole: 0.4,
-                    chartArea: { left: 100, top: 70, width: '100%', height: '80%' },
-                    colors: ['#457ABF','#F27B35'] // Personalizar los colores aquí
+                    chartArea: {
+                        left: 100,
+                        top: 70,
+                        width: '100%',
+                        height: '80%'
+                    },
+                    colors: ['#457ABF', '#F27B35'] // Personalizar los colores aquí
                 };
 
                 var chart = new google.visualization.PieChart(document.getElementById('piechart2'));
                 chart.draw(data, options);
-                 // Obtener la URL de la imagen generada
+                // Obtener la URL de la imagen generada
                 var imageUrl = chart.getImageURI();
-               // Obtén una referencia a la imagen por su id
+                // Obtén una referencia a la imagen por su id
                 var imagen = document.getElementById('imagenDesglose');
                 // Asigna un valor a la imagen
                 imagen.value = imageUrl;
             }
         }
+        var etiquetas = [];
+        var tabla2Depuracion = @json($tabla2Depuracion); // Convierte el array PHP en un objeto JavaScript
+        @for ($i = 0; $i < $Depuracion; $i++)
+            etiquetas.push('{{ $tabla2Depuracion[$i]->concepto }}');
+        @endfor
 
+        var valores = [];
+        @for ($i = 0; $i < $Depuracion; $i++)
+            valores.push({{ ($tabla2Depuracion[$i]->cantidad / $totalGeneral) * 100 }});
+        @endfor
         // Llamar a la función generadora de gráficos
-        var etiquetas = ['{{$tabla2Depuracion[0]->concepto}}',' {{$tabla2Depuracion[1]->concepto}}'];
-        var valores = [{{$result1Depuracion}}, {{$result2Depuracion}}];
-        generatePieChart(etiquetas, valores,'Desglose llamadas depuradas');
+        generatePieChart(etiquetas, valores, 'Desglose llamadas depuradas');
     </script>
     {{-- Llamadas contestadas --}}
-     <script type="text/javascript">
-        function generatePieChart(labels, values,title) {
-            google.charts.load('current', { 'packages': ['corechart'] });
+    <script type="text/javascript">
+        function generatePieChart(labels, values, title) {
+            google.charts.load('current', {
+                'packages': ['corechart']
+            });
             google.charts.setOnLoadCallback(drawChart);
 
             function drawChart() {
@@ -287,30 +281,44 @@
                 var options = {
                     title: title,
                     pieHole: 0.4,
-                    chartArea: { left: 100, top: 70, width: '100%', height: '80%' },
-                    colors: ['#80B2DF','#264478','#4875C5','#A5A5A5'] // Personalizar los colores aquí
+                    chartArea: {
+                        left: 100,
+                        top: 70,
+                        width: '100%',
+                        height: '80%'
+                    },
+                    colors: ['#80B2DF', '#264478', '#4875C5', '#A5A5A5'] // Personalizar los colores aquí
                 };
 
                 var chart = new google.visualization.PieChart(document.getElementById('piechart3'));
                 chart.draw(data, options);
-                 // Obtener la URL de la imagen generada
+                // Obtener la URL de la imagen generada
                 var imageUrl = chart.getImageURI();
-               // Obtén una referencia a la imagen por su id
+                // Obtén una referencia a la imagen por su id
                 var imagen = document.getElementById('imagenContestadas');
                 // Asigna un valor a la imagen
                 imagen.value = imageUrl;
             }
         }
+        var etiquetas = [];
+        var tabla3Contestadas = @json($tabla3Contestadas); // Convierte el array PHP en un objeto JavaScript
+        @for ($i = 0; $i < $Contestadas; $i++)
+            etiquetas.push('{{ $tabla3Contestadas[$i]->concepto }}');
+        @endfor
 
+        var valores = [];
+        @for ($i = 0; $i < $Contestadas; $i++)
+            valores.push({{ ($tabla3Contestadas[$i]->cantidad / $totalGeneral) * 100 }});
+        @endfor
         // Llamar a la función generadora de gráficos
-        var etiquetas = ['{{$tabla3Contestadas[0]->concepto}}',' {{$tabla3Contestadas[1]->concepto}}','{{$tabla3Contestadas[2]->concepto}}','{{$tabla3Contestadas[3]->concepto}}'];
-        var valores = [{{$result1Contestadas}}, {{$result2Contestadas}},{{$result3Contestadas}},{{$result4Contestadas}}];
-        generatePieChart(etiquetas, valores,'Desglose llamadas contestadas');
+        generatePieChart(etiquetas, valores, 'Desglose llamadas contestadas');
     </script>
-      {{-- Desglose de seguimiento de llamada --}}
-      <script type="text/javascript">
-        function generatePieChart(labels, values,title) {
-            google.charts.load('current', { 'packages': ['corechart'] });
+    {{-- Desglose de seguimiento de llamada --}}
+    <script type="text/javascript">
+        function generatePieChart(labels, values, title) {
+            google.charts.load('current', {
+                'packages': ['corechart']
+            });
             google.charts.setOnLoadCallback(drawChart);
 
             function drawChart() {
@@ -324,25 +332,37 @@
                 var options = {
                     title: title,
                     pieHole: 0.4,
-                    chartArea: { left: 100, top: 70, width: '100%', height: '80%' },
-                    colors: ['#5B9BD5','#70AD47','#43682B','#FFC000'] // Personalizar los colores aquí
+                    chartArea: {
+                        left: 100,
+                        top: 70,
+                        width: '100%',
+                        height: '80%'
+                    },
+                    colors: ['#5B9BD5', '#70AD47', '#43682B', '#FFC000'] // Personalizar los colores aquí
                 };
 
                 var chart = new google.visualization.PieChart(document.getElementById('piechart4'));
                 chart.draw(data, options);
-                 // Obtener la URL de la imagen generada
+                // Obtener la URL de la imagen generada
                 var imageUrl = chart.getImageURI();
-               // Obtén una referencia a la imagen por su id
+                // Obtén una referencia a la imagen por su id
                 var imagen = document.getElementById('imagenSeguimiento');
                 // Asigna un valor a la imagen
                 imagen.value = imageUrl;
             }
         }
+        var etiquetas = [];
+        var tabla4Seguimiento = @json($tabla4Seguimiento); // Convierte el array PHP en un objeto JavaScript
+        @for ($i = 0; $i < $Seguimiento; $i++)
+            etiquetas.push('{{ $tabla4Seguimiento[$i]->concepto }}');
+        @endfor
 
+        var valores = [];
+        @for ($i = 0; $i < $Seguimiento; $i++)
+            valores.push({{ ($tabla4Seguimiento[$i]->cantidad / $totalGeneral) * 100 }});
+        @endfor
         // Llamar a la función generadora de gráficos
-        var etiquetas = ['{{$tabla4Seguimiento[0]->concepto}}',' {{$tabla4Seguimiento[1]->concepto}}','{{$tabla4Seguimiento[2]->concepto}}','{{$tabla4Seguimiento[3]->concepto}}'];
-        var valores = [{{$result1Seguimiento}}, {{$result2Seguimiento}},{{$result3Seguimiento}},{{$result4Seguimiento}}];
-        generatePieChart(etiquetas, valores,'Desglose seguimiento de llamada');
+        generatePieChart(etiquetas, valores, 'Desglose seguimiento de llamada');
     </script>
 </body>
 

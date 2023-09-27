@@ -84,19 +84,20 @@ class ContactController extends Controller
         from [kpimplementta].[dbo].[profile_operation_t25] where 
         plaza = ? and numero = ? and año = ? and tipo='ContactCenter' 
         and tabla ='1. General'  group by concepto", [$plaza, $mes, $anio]);
-        DB::disconnect('dynamic');
-        if ($tabla1General == null) {
-            return back()->with('error', 'No hay informacion.');
+        
+        $totalGeneral = DB::connection('dynamic')->select("select sum(cantidad) as total 
+        from [kpimplementta].[dbo].[profile_operation_t25] where 
+        plaza = ? and numero = ? and año = ? and tipo='ContactCenter' 
+        and tabla ='1. General'", [$plaza, $mes, $anio]);
+
+        $General=0;
+        foreach ($tabla1General as $item) {
+            $General++;
         }
-        $cantidad1General =  $tabla1General[0]->cantidad;
-        $cantidad2General = $tabla1General[1]->cantidad;
-        $cantidad3General =  $tabla1General[2]->cantidad;
-        $totalGeneral = $cantidad1General +
-            $cantidad2General +
-            $cantidad3General;
-        $result1General = redondearNumero(($cantidad1General / $totalGeneral) * 100);
-        $result2General = redondearNumero(($cantidad2General / $totalGeneral) * 100);
-        $result3General = redondearNumero(($cantidad3General / $totalGeneral) * 100);
+        
+        DB::disconnect('dynamic');
+        
+        
         //Tabla 2
         $databaseName2 = 'kpimplementta';
         $connection2 = DatabaseUtils::getDynamicConnection($databaseName2);
@@ -104,13 +105,19 @@ class ContactController extends Controller
         from [kpimplementta].[dbo].[profile_operation_t25] where 
         plaza = ? and numero = ? and año = ? and tipo='ContactCenter' 
         and tabla ='2. Depuracion'  group by concepto", [$plaza, $mes, $anio]);
+        
+        $totalDepuracion = DB::connection('dynamic')->select("select sum(cantidad) as total 
+        from [kpimplementta].[dbo].[profile_operation_t25] where 
+        plaza = ? and numero = ? and año = ? and tipo='ContactCenter' 
+        and tabla ='2. Depuracion'", [$plaza, $mes, $anio]);
+
+        $Depuracion=0;
+        foreach ($tabla2Depuracion as $item) {
+            $Depuracion++;
+        }
+
         DB::disconnect('dynamic');
-        $cantidad1Depuracion =  $tabla2Depuracion[0]->cantidad;
-        $cantidad2Depuracion = $tabla2Depuracion[1]->cantidad;
-        $totalDepuracion = $cantidad1Depuracion +
-            $cantidad2Depuracion;
-        $result1Depuracion = redondearNumero(($cantidad1Depuracion / $totalDepuracion) * 100);
-        $result2Depuracion = redondearNumero(($cantidad2Depuracion / $totalDepuracion) * 100);
+        
         //Tabla 3
         $databaseName3 = 'kpimplementta';
         $connection3 = DatabaseUtils::getDynamicConnection($databaseName3);
@@ -118,19 +125,19 @@ class ContactController extends Controller
         select concepto, sum(cantidad) as cantidad from [kpimplementta].[dbo].[profile_operation_t25] where 
         plaza = ? and numero = ? and año = ? and tipo='ContactCenter' 
         and tabla ='3. Contestadas'  group by concepto", [$plaza, $mes, $anio]);
+        
+        $totalContestadas = DB::connection('dynamic')->select("
+        select sum(cantidad) as total from [kpimplementta].[dbo].[profile_operation_t25] where 
+        plaza = ? and numero = ? and año = ? and tipo='ContactCenter' 
+        and tabla ='3. Contestadas'", [$plaza, $mes, $anio]);
+
+        $Contestadas=0;
+        foreach ($tabla3Contestadas as $item) {
+            $Contestadas++;
+        }
+
         DB::disconnect('dynamic');
-        $cantidad1Contestadas =  $tabla3Contestadas[0]->cantidad;
-        $cantidad2Contestadas = $tabla3Contestadas[1]->cantidad;
-        $cantidad3Contestadas =  $tabla3Contestadas[2]->cantidad;
-        $cantidad4Contestadas = $tabla3Contestadas[3]->cantidad;
-        $totalContestadas = $cantidad1Contestadas +
-            $cantidad2Contestadas +
-            $cantidad3Contestadas +
-            $cantidad4Contestadas;
-        $result1Contestadas = redondearNumero(($cantidad1Contestadas / $totalContestadas) * 100);
-        $result2Contestadas = redondearNumero(($cantidad2Contestadas / $totalContestadas) * 100);
-        $result3Contestadas = redondearNumero(($cantidad3Contestadas / $totalContestadas) * 100);
-        $result4Contestadas = redondearNumero(($cantidad4Contestadas / $totalContestadas) * 100);
+       
         //Tabla 4
         $databaseName4 = 'kpimplementta';
         $connection3 = DatabaseUtils::getDynamicConnection($databaseName4);
@@ -138,19 +145,19 @@ class ContactController extends Controller
         select concepto, sum(cantidad) as cantidad from [kpimplementta].[dbo].[profile_operation_t25] where 
         plaza = ? and numero = ? and año = ? and tipo='ContactCenter' 
         and tabla ='4. Seguimiento'  group by concepto", [$plaza, $mes, $anio]);
+        
+        $totalSeguimiento = DB::connection('dynamic')->select("
+        select sum(cantidad) as total from [kpimplementta].[dbo].[profile_operation_t25] where 
+        plaza = ? and numero = ? and año = ? and tipo='ContactCenter' 
+        and tabla ='4. Seguimiento'", [$plaza, $mes, $anio]);
+
+        $Seguimiento=0;
+        foreach ($tabla4Seguimiento as $item) {
+            $Seguimiento++;
+        }
+
         DB::disconnect('dynamic');
-        $cantidad1Seguimiento =  $tabla4Seguimiento[0]->cantidad;
-        $cantidad2Seguimiento = $tabla4Seguimiento[1]->cantidad;
-        $cantidad3Seguimiento =  $tabla4Seguimiento[2]->cantidad;
-        $cantidad4Seguimiento = $tabla4Seguimiento[3]->cantidad;
-        $totalSeguimiento = $cantidad1Seguimiento +
-            $cantidad2Seguimiento +
-            $cantidad3Seguimiento +
-            $cantidad4Seguimiento;
-        $result1Seguimiento = redondearNumero(($cantidad1Seguimiento / $totalSeguimiento) * 100);
-        $result2Seguimiento = redondearNumero(($cantidad2Seguimiento / $totalSeguimiento) * 100);
-        $result3Seguimiento = redondearNumero(($cantidad3Seguimiento / $totalSeguimiento) * 100);
-        $result4Seguimiento = redondearNumero(($cantidad4Seguimiento / $totalSeguimiento) * 100);
+       
         //Nombre de la plaza 
         $nombre = extraerPrimeraPalabra($plaza);
         //Formato de fecha formateada
@@ -161,29 +168,20 @@ class ContactController extends Controller
             [
                 //Tabla 1 General
                 'tabla1General' => $tabla1General,
-                'result1General' => $result1General,
-                'result2General' => $result2General,
-                'result3General' => $result3General,
-                'totalGeneral' => $totalGeneral,
+                'General' => $General,
+                'totalGeneral' => $totalGeneral[0]->total,
                 //Tabla 2 General
                 'tabla2Depuracion' => $tabla2Depuracion,
-                'result1Depuracion' => $result1Depuracion,
-                'result2Depuracion' => $result2Depuracion,
-                'totalDepuracion' => $totalDepuracion,
+                'Depuracion' => $Depuracion,
+                'totalDepuracion' => $totalDepuracion[0]->total,
                 //Tabla 3 Contestadas
                 'tabla3Contestadas' => $tabla3Contestadas,
-                'result1Contestadas' => $result1Contestadas,
-                'result2Contestadas' => $result2Contestadas,
-                'result3Contestadas' => $result3Contestadas,
-                'result4Contestadas' => $result4Contestadas,
-                'totalContestadas' => $totalContestadas,
+                'Contestadas' => $Contestadas,
+                'totalContestadas' => $totalContestadas[0]->total,
                 //Tabla 4
                 'tabla4Seguimiento' => $tabla4Seguimiento,
-                'result1Seguimiento' => $result1Seguimiento,
-                'result2Seguimiento' => $result2Seguimiento,
-                'result3Seguimiento' => $result3Seguimiento,
-                'result4Seguimiento' => $result4Seguimiento,
-                'totalSeguimiento' => $totalSeguimiento,
+                'Seguimiento' => $Seguimiento,
+                'totalSeguimiento' => $totalSeguimiento[0]->total,
                 //Ruta imagen
                 'rutaImagen' => $imagen,
                 //Nombre plaza 
@@ -226,19 +224,14 @@ class ContactController extends Controller
         from [kpimplementta].[dbo].[profile_operation_t25] where 
         plaza = ? and numero = ? and año = ? and tipo='ContactCenter' 
         and tabla ='1. General'  group by concepto", [$plaza, $mes, $anio]);
+
+        $totalGeneral = DB::connection('dynamic')->select("select sum(cantidad) as total 
+        from [kpimplementta].[dbo].[profile_operation_t25] where 
+        plaza = ? and numero = ? and año = ? and tipo='ContactCenter' 
+        and tabla ='1. General'", [$plaza, $mes, $anio]);
         DB::disconnect('dynamic');
-        if ($tabla1General == null) {
-            return back()->with('error', 'No hay informacion.');
-        }
-        $cantidad1General =  $tabla1General[0]->cantidad;
-        $cantidad2General = $tabla1General[1]->cantidad;
-        $cantidad3General =  $tabla1General[2]->cantidad;
-        $totalGeneral = $cantidad1General +
-            $cantidad2General +
-            $cantidad3General;
-        $result1General = redondearNumero(($cantidad1General / $totalGeneral) * 100);
-        $result2General = redondearNumero(($cantidad2General / $totalGeneral) * 100);
-        $result3General = redondearNumero(($cantidad3General / $totalGeneral) * 100);
+        
+        
         //Tabla 2
         $databaseName2 = 'kpimplementta';
         $connection2 = DatabaseUtils::getDynamicConnection($databaseName2);
@@ -246,13 +239,13 @@ class ContactController extends Controller
         from [kpimplementta].[dbo].[profile_operation_t25] where 
         plaza = ? and numero = ? and año = ? and tipo='ContactCenter' 
         and tabla ='2. Depuracion'  group by concepto", [$plaza, $mes, $anio]);
+
+        $totalDepuracion = DB::connection('dynamic')->select("select sum(cantidad) as total 
+        from [kpimplementta].[dbo].[profile_operation_t25] where 
+        plaza = ? and numero = ? and año = ? and tipo='ContactCenter' 
+        and tabla ='2. Depuracion'", [$plaza, $mes, $anio]);
         DB::disconnect('dynamic');
-        $cantidad1Depuracion =  $tabla2Depuracion[0]->cantidad;
-        $cantidad2Depuracion = $tabla2Depuracion[1]->cantidad;
-        $totalDepuracion = $cantidad1Depuracion +
-            $cantidad2Depuracion;
-        $result1Depuracion = redondearNumero(($cantidad1Depuracion / $totalDepuracion) * 100);
-        $result2Depuracion = redondearNumero(($cantidad2Depuracion / $totalDepuracion) * 100);
+        
         //Tabla 3
         $databaseName3 = 'kpimplementta';
         $connection3 = DatabaseUtils::getDynamicConnection($databaseName3);
@@ -260,19 +253,13 @@ class ContactController extends Controller
         select concepto, sum(cantidad) as cantidad from [kpimplementta].[dbo].[profile_operation_t25] where 
         plaza = ? and numero = ? and año = ? and tipo='ContactCenter' 
         and tabla ='3. Contestadas'  group by concepto", [$plaza, $mes, $anio]);
+
+        $totalContestadas = DB::connection('dynamic')->select("
+        select sum(cantidad) as total from [kpimplementta].[dbo].[profile_operation_t25] where 
+        plaza = ? and numero = ? and año = ? and tipo='ContactCenter' 
+        and tabla ='3. Contestadas'", [$plaza, $mes, $anio]);
         DB::disconnect('dynamic');
-        $cantidad1Contestadas =  $tabla3Contestadas[0]->cantidad;
-        $cantidad2Contestadas = $tabla3Contestadas[1]->cantidad;
-        $cantidad3Contestadas =  $tabla3Contestadas[2]->cantidad;
-        $cantidad4Contestadas = $tabla3Contestadas[3]->cantidad;
-        $totalContestadas = $cantidad1Contestadas +
-            $cantidad2Contestadas +
-            $cantidad3Contestadas +
-            $cantidad4Contestadas;
-        $result1Contestadas = redondearNumero(($cantidad1Contestadas / $totalContestadas) * 100);
-        $result2Contestadas = redondearNumero(($cantidad2Contestadas / $totalContestadas) * 100);
-        $result3Contestadas = redondearNumero(($cantidad3Contestadas / $totalContestadas) * 100);
-        $result4Contestadas = redondearNumero(($cantidad4Contestadas / $totalContestadas) * 100);
+        
         //Tabla 4
         $databaseName4 = 'kpimplementta';
         $connection3 = DatabaseUtils::getDynamicConnection($databaseName4);
@@ -280,19 +267,13 @@ class ContactController extends Controller
         select concepto, sum(cantidad) as cantidad from [kpimplementta].[dbo].[profile_operation_t25] where 
         plaza = ? and numero = ? and año = ? and tipo='ContactCenter' 
         and tabla ='4. Seguimiento'  group by concepto", [$plaza, $mes, $anio]);
+
+        $totalSeguimiento = DB::connection('dynamic')->select("
+        select sum(cantidad) as total from [kpimplementta].[dbo].[profile_operation_t25] where 
+        plaza = ? and numero = ? and año = ? and tipo='ContactCenter' 
+        and tabla ='4. Seguimiento'", [$plaza, $mes, $anio]);
         DB::disconnect('dynamic');
-        $cantidad1Seguimiento =  $tabla4Seguimiento[0]->cantidad;
-        $cantidad2Seguimiento = $tabla4Seguimiento[1]->cantidad;
-        $cantidad3Seguimiento =  $tabla4Seguimiento[2]->cantidad;
-        $cantidad4Seguimiento = $tabla4Seguimiento[3]->cantidad;
-        $totalSeguimiento = $cantidad1Seguimiento +
-            $cantidad2Seguimiento +
-            $cantidad3Seguimiento +
-            $cantidad4Seguimiento;
-        $result1Seguimiento = redondearNumero(($cantidad1Seguimiento / $totalSeguimiento) * 100);
-        $result2Seguimiento = redondearNumero(($cantidad2Seguimiento / $totalSeguimiento) * 100);
-        $result3Seguimiento = redondearNumero(($cantidad3Seguimiento / $totalSeguimiento) * 100);
-        $result4Seguimiento = redondearNumero(($cantidad4Seguimiento / $totalSeguimiento) * 100);
+       
         //Nombre de la plaza 
         $nombre = extraerPrimeraPalabra($plaza);
         //Formato de fecha formateada
@@ -303,29 +284,16 @@ class ContactController extends Controller
             [
                 //Tabla 1 General
                 'tabla1General' => $tabla1General,
-                'result1General' => $result1General,
-                'result2General' => $result2General,
-                'result3General' => $result3General,
-                'totalGeneral' => $totalGeneral,
+                'totalGeneral' => $totalGeneral[0]->total,
                 //Tabla 2 General
                 'tabla2Depuracion' => $tabla2Depuracion,
-                'result1Depuracion' => $result1Depuracion,
-                'result2Depuracion' => $result2Depuracion,
-                'totalDepuracion' => $totalDepuracion,
+                'totalDepuracion' => $totalDepuracion[0]->total,
                 //Tabla 3 Contestadas
                 'tabla3Contestadas' => $tabla3Contestadas,
-                'result1Contestadas' => $result1Contestadas,
-                'result2Contestadas' => $result2Contestadas,
-                'result3Contestadas' => $result3Contestadas,
-                'result4Contestadas' => $result4Contestadas,
-                'totalContestadas' => $totalContestadas,
+                'totalContestadas' => $totalContestadas[0]->total,
                 //Tabla 4
                 'tabla4Seguimiento' => $tabla4Seguimiento,
-                'result1Seguimiento' => $result1Seguimiento,
-                'result2Seguimiento' => $result2Seguimiento,
-                'result3Seguimiento' => $result3Seguimiento,
-                'result4Seguimiento' => $result4Seguimiento,
-                'totalSeguimiento' => $totalSeguimiento,
+                'totalSeguimiento' => $totalSeguimiento[0]->total,
                 //Ruta imagen
                 'rutaImagen' => $rutaImagen,
                 //Fecha Formateada

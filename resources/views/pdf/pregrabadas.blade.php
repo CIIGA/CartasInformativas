@@ -29,7 +29,7 @@
             <br />
             Pregrabadas
         </p>
-        <img class="imgHeader2" src="{{ asset('img/plazas/'.$rutaImagen.'.jpg') }}">
+        <img class="imgHeader2" src="{{ asset('img/plazas/' . $rutaImagen . '.jpg') }}">
     </header>
     <main>
         <p class="align-right mr-20">
@@ -39,13 +39,13 @@
             Notificacion de adeudo en su cuenta de agua
         </p>
         <p class="bold">
-            COMISIÓN ESTATAL DE SERVICIOS PÚBLICOS DE {{$nombre}}
+            COMISIÓN ESTATAL DE SERVICIOS PÚBLICOS DE {{ $nombre }}
         </p>
         <p>
             <span class="bold">
                 Periodo:
             </span>
-            {{$fechaFormateada}}
+            {{ $fechaFormateada }}
         </p>
         <p>
             <span class="bold">
@@ -63,19 +63,17 @@
                     <td>Cantidad</td>
                     <td>%</td>
                 </tr>
-                <tr>
-                    <td>{{$tabla1Pregrabada[0]->concepto}}</td>
-                    <td>{{$tabla1Pregrabada[0]->cantidad}}</td>
-                    <td>{{$result1}}</td>
-                </tr>
-                <tr>
-                    <td>{{$tabla1Pregrabada[1]->concepto}}</td>
-                    <td>{{$tabla1Pregrabada[1]->cantidad}}</td>
-                    <td>{{$result2}}</td>
-                </tr>
+
+                @foreach ($tabla1Pregrabada as $item)
+                    <tr>
+                        <td>{{ $item->concepto }}</td>
+                        <td>{{ $item->cantidad }}</td>
+                        <td>{{ round(($item->cantidad / $totalGeneral) * 100,2) }}</td>
+                    </tr>
+                @endforeach
                 <tr>
                     <td>Total</td>
-                    <td>{{$total1}}</td>
+                    <td>{{ $totalGeneral }}</td>
                     <td>100</td>
                 </tr>
             </tbody>
@@ -91,29 +89,16 @@
                     <td>Cantidad</td>
                     <td>%</td>
                 </tr>
-                <tr>
-                    <td>{{$tabla2Pregrabada[0]->concepto}}</td>
-                    <td>{{$tabla2Pregrabada[0]->cantidad}}</td>
-                    <td>{{$result11}}</td>
-                </tr>
-                <tr>
-                    <td>{{$tabla2Pregrabada[1]->concepto}}</td>
-                    <td>{{$tabla2Pregrabada[1]->cantidad}}</td>
-                    <td>{{$result22}}</td>
-                </tr>
-                <tr>
-                    <td>{{$tabla2Pregrabada[2]->concepto}}</td>
-                    <td>{{$tabla2Pregrabada[2]->cantidad}}</td>
-                    <td>{{$result33}}</td>
-                </tr>
-                <tr>
-                    <td>{{$tabla2Pregrabada[3]->concepto}}</td>
-                    <td>{{$tabla2Pregrabada[3]->cantidad}}</td>
-                    <td>{{$result44}}</td>
-                </tr>
+                @foreach ($tabla2Pregrabada as $item)
+                    <tr>
+                        <td>{{ $item->concepto }}</td>
+                        <td>{{ $item->cantidad }}</td>
+                        <td>{{ round(($item->cantidad / $totalDesglose) * 100,2) }}</td>
+                    </tr>
+                @endforeach
                 <tr>
                     <td>Total</td>
-                    <td>{{$total22}}</td>
+                    <td>{{ $totalDesglose }}</td>
                     <td>100</td>
                 </tr>
             </tbody>
@@ -124,13 +109,13 @@
             <div id="piechart2" style="width: 400px; height: 200px;"></div>
         </div>
         <div>
-                NOTA:
-                <br/>
-                1.No hubo horario determinado para el envío de las pregrabadas
-                <br/>
-                2.La categoría Número desconectado automático (ADC) incluye las subcategorías: DROP, PDROP, LRERR
-                <br/>
-                3.La categoría Desviada o transferida a buzón incluye las subcategorías: NA, XFER, NI.
+            NOTA:
+            <br />
+            1.No hubo horario determinado para el envío de las pregrabadas
+            <br />
+            2.La categoría Número desconectado automático (ADC) incluye las subcategorías: DROP, PDROP, LRERR
+            <br />
+            3.La categoría Desviada o transferida a buzón incluye las subcategorías: NA, XFER, NI.
         </div>
     </main>
     <div align="center">
@@ -138,85 +123,116 @@
             @csrf
             <input type="hidden" id="imagenContestadas" name="imagenContestadas" />
             <input type="hidden" id="imagenSeguimiento" name="imagenSeguimiento" />
-            <input type="hidden" id="fechaF" name="fechaF" value="{{$fechaF}}" />
-            <input type="hidden" id="plaza" name="plaza" value="{{$plaza}}" />
-            <input type="hidden" id="idPlaza" name="idPlaza" value="{{$idPlaza}}" />
+            <input type="hidden" id="fechaF" name="fechaF" value="{{ $fechaF }}" />
+            <input type="hidden" id="plaza" name="plaza" value="{{ $plaza }}" />
+            <input type="hidden" id="idPlaza" name="idPlaza" value="{{ $idPlaza }}" />
             <button type="submit" id="create_pdf" class="btn btn-success">Generar PDF</button>
         </form>
     </div>
     {{-- Llamadas contestadas --}}
     <script type="text/javascript">
-        function generatePieChart(labels, values,title) {
-        google.charts.load('current', { 'packages': ['corechart'] });
-        google.charts.setOnLoadCallback(drawChart);
+        function generatePieChart(labels, values, title) {
+            google.charts.load('current', {
+                'packages': ['corechart']
+            });
+            google.charts.setOnLoadCallback(drawChart);
 
-        function drawChart() {
-            var data = new google.visualization.DataTable();
-            data.addColumn('string', 'Label');
-            data.addColumn('number', 'Value');
-            for (var i = 0; i < labels.length; i++) {
-                data.addRow([labels[i], values[i]]);
+            function drawChart() {
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Label');
+                data.addColumn('number', 'Value');
+                for (var i = 0; i < labels.length; i++) {
+                    data.addRow([labels[i], values[i]]);
+                }
+
+                var options = {
+                    title: title,
+                    pieHole: 0.4,
+                    chartArea: {
+                        left: 100,
+                        top: 70,
+                        width: '100%',
+                        height: '80%'
+                    },
+                    colors: ['#264478', '#80B2DF'] // Personalizar los colores aquí
+                };
+
+                var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+                chart.draw(data, options);
+                // Obtener la URL de la imagen generada
+                var imageUrl = chart.getImageURI();
+                // Obtén una referencia a la imagen por su id
+                var imagen = document.getElementById('imagenContestadas');
+                // Asigna un valor a la imagen
+                imagen.value = imageUrl;
             }
-
-            var options = {
-                title: title,
-                pieHole: 0.4,
-                chartArea: { left: 100, top: 70, width: '100%', height: '80%' },
-                colors: ['#264478','#80B2DF'] // Personalizar los colores aquí
-            };
-
-            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-            chart.draw(data, options);
-             // Obtener la URL de la imagen generada
-            var imageUrl = chart.getImageURI();
-           // Obtén una referencia a la imagen por su id
-            var imagen = document.getElementById('imagenContestadas');
-            // Asigna un valor a la imagen
-            imagen.value = imageUrl;
         }
-    }
 
-    // Llamar a la función generadora de gráficos
-    var etiquetas = ['{{$tabla1Pregrabada[0]->concepto}}',' {{$tabla1Pregrabada[1]->concepto}}'];
-    var valores = [{{$result1}}, {{$result2}}];
-    generatePieChart(etiquetas, valores,'Realizadas');
+        // Llamar a la función generadora de gráficos
+
+
+        var etiquetas = [];
+        var tabla1Pregrabada = @json($tabla1Pregrabada); // Convierte el array PHP en un objeto JavaScript
+        @for ($i = 0; $i < $general; $i++)
+            etiquetas.push('{{ $tabla1Pregrabada[$i]->concepto }}');
+        @endfor
+
+        var valores = [];
+        @for ($i = 0; $i < $general; $i++)
+            valores.push({{ ($tabla1Pregrabada[$i]->cantidad / $totalGeneral) * 100 }});
+        @endfor
+        generatePieChart(etiquetas, valores, 'Realizadas');
     </script>
     {{-- Desglose de seguimiento de llamada --}}
     <script type="text/javascript">
-        function generatePieChart(labels, values,title) {
-        google.charts.load('current', { 'packages': ['corechart'] });
-        google.charts.setOnLoadCallback(drawChart);
+        function generatePieChart(labels, values, title) {
+            google.charts.load('current', {
+                'packages': ['corechart']
+            });
+            google.charts.setOnLoadCallback(drawChart);
 
-        function drawChart() {
-            var data = new google.visualization.DataTable();
-            data.addColumn('string', 'Label');
-            data.addColumn('number', 'Value');
-            for (var i = 0; i < labels.length; i++) {
-                data.addRow([labels[i], values[i]]);
+            function drawChart() {
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Label');
+                data.addColumn('number', 'Value');
+                for (var i = 0; i < labels.length; i++) {
+                    data.addRow([labels[i], values[i]]);
+                }
+
+                var options = {
+                    title: title,
+                    pieHole: 0.4,
+                    chartArea: {
+                        left: 100,
+                        top: 70,
+                        width: '100%',
+                        height: '80%'
+                    },
+                    colors: ['#F27B35', '#FFC000', '#76A646', '#4472C4'] // Personalizar los colores aquí
+                };
+
+                var chart = new google.visualization.PieChart(document.getElementById('piechart2'));
+                chart.draw(data, options);
+                // Obtener la URL de la imagen generada
+                var imageUrl = chart.getImageURI();
+                // Obtén una referencia a la imagen por su id
+                var imagen = document.getElementById('imagenSeguimiento');
+                // Asigna un valor a la imagen
+                imagen.value = imageUrl;
             }
-
-            var options = {
-                title: title,
-                pieHole: 0.4,
-                chartArea: { left: 100, top: 70, width: '100%', height: '80%' },
-                colors: ['#F27B35','#FFC000','#76A646','#4472C4'] // Personalizar los colores aquí
-            };
-
-            var chart = new google.visualization.PieChart(document.getElementById('piechart2'));
-            chart.draw(data, options);
-             // Obtener la URL de la imagen generada
-            var imageUrl = chart.getImageURI();
-           // Obtén una referencia a la imagen por su id
-            var imagen = document.getElementById('imagenSeguimiento');
-            // Asigna un valor a la imagen
-            imagen.value = imageUrl;
         }
-    }
 
-    // Llamar a la función generadora de gráficos
-    var etiquetas = ['{{$tabla2Pregrabada[0]->concepto}}',' {{$tabla2Pregrabada[1]->concepto}}','{{$tabla2Pregrabada[2]->concepto}}','{{$tabla2Pregrabada[3]->concepto}}'];
-    var valores = [{{$result11}}, {{$result22}},{{$result33}},{{$result44}}];
-    generatePieChart(etiquetas, valores,'No exitosas');
+        var etiquetas = [];
+        var tabla2Pregrabada = @json($tabla2Pregrabada); // Convierte el array PHP en un objeto JavaScript
+        @for ($i = 0; $i < $Desglose; $i++)
+            etiquetas.push('{{ $tabla2Pregrabada[$i]->concepto }}');
+        @endfor
+        var valores = [];
+        @for ($i = 0; $i < $Desglose; $i++)
+            valores.push({{ ($tabla2Pregrabada[$i]->cantidad / $totalGeneral) * 100 }});
+        @endfor
+        
+        generatePieChart(etiquetas, valores, 'No exitosas');
     </script>
 </body>
 
