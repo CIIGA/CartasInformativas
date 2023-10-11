@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\View;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
 
 class CorreoController extends Controller
@@ -59,6 +60,7 @@ class CorreoController extends Controller
                             $insertar2->cuenta = $row[0];
                             $insertar2->fecha_leido = formatoFechaInt($row[1]);
                             $insertar2->fecha_enviado = formatoFechaInt($row[2]);
+                            $insertar2->idPlaza = $request->idPlaza;
                             $insertar2->save();
                         } else {
                             return redirect()->back()->with('error', 'Se encontro el campo cuenta vacio');
@@ -196,5 +198,19 @@ class CorreoController extends Controller
             ]
         );
         return $pdf->stream();
+    }
+
+    public function fechas($idPlaza){
+        
+        $databaseName1= 'kpimplementta';
+        $connection1 = DatabaseUtils::getDynamicConnection($databaseName1);
+        $historico = DB::connection('dynamic')->select("select fecha_enviado from historicoCampaniaCorreo where idPlaza=$idPlaza
+        group by fecha_enviado order by fecha_enviado desc");
+        DB::disconnect('dynamic');
+            $contenido = View::make('form.formCorreo', ['historico' => $historico,'idPlaza' => $idPlaza])->render();
+       
+        
+        //retornamos la respuesta json
+        return response()->json(['contenido' => $contenido]);
     }
 }

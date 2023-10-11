@@ -2,6 +2,9 @@ $(document).ready(function () {
     // Cuando el usuario selecciona una opción del combobox
     $("#combobox").change(function () {
         var plazaId = $(this).val();
+        if (plazaId === '') {
+            return;
+        }
         // Realizar la petición AJAX para obtener la lista de archivos de la plaza
         $.ajax({
             url: "/plazas/" + plazaId + "/imagen", // Ruta de la función obtenerImagenPlaza del controlador con ajax

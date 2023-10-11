@@ -11,12 +11,12 @@ function mostrarOcultarContenido() {
         // Verificamos si se ha seleccionado la plaza "Mexicali" (valor "2023")
         // Obtenemos el contenedor del campaña de correos 
         const correos = document.getElementById('correos');
-        if (selectedValue === '2023') {
-            correos.style.display = 'flex';
-        }
-        else{
-            correos.style.display = 'none';
-        }
+        // if (selectedValue === '2023') {
+        //     correos.style.display = 'flex';
+        // }
+        // else{
+        //     correos.style.display = 'none';
+        // }
 
         contenido.style.display = 'flex'; // Mostramos el contenedor con display:flex
     } else {
