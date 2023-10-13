@@ -41,8 +41,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Enviar el formulario manualmente
         $.ajax({
-            url: "/guardar_archivos",
-            // url: "https://gallant-driscoll.198-71-62-113.plesk.page/implementta/modulos/CartasInformativas/public/index.php/guardar_archivos/",
+            // url: "/guardar_archivos",
+            url: "https://gallant-driscoll.198-71-62-113.plesk.page/implementta/modulos/CartasInformativas/public/index.php/guardar_archivos/",
             type: "POST",
             data: formData,
             processData: false,

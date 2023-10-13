@@ -4,7 +4,8 @@ $(document).ready(function () {
         var plazaId = $(this).val();
         // Realizar la petición AJAX para obtener la lista de archivos de la plaza
         $.ajax({
-            url: "/plazas/" + plazaId + "/imagen", // Ruta de la función obtenerImagenPlaza del controlador con ajax
+            // url: "/plazas/" + plazaId + "/imagen",
+            url: "https://gallant-driscoll.198-71-62-113.plesk.page/implementta/modulos/CartasInformativas/public/index.php/plazas/" + plazaId + "/imagen",
             type: "GET",
             xhrFields: {
                 responseType: 'blob' // Indicar que esperamos una respuesta en formato binario (imagen)
