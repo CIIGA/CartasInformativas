@@ -31,7 +31,9 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact');
 Route::get('/pdfContact/{idPlaza}/{plaza}/{fechaF}', [ContactController::class, 'pdfContact'])->name('pdfContact');
 Route::post('/GenerarPDFContact', [ContactController::class, 'GenerarPDFContact'])->name('GenerarPDFContact');
 //Ruta de correos
+Route::get('/fechasCorreos/{idPlaza}', [CorreoController::class, 'fechas'])->name('fechas');
 Route::post('/subirdatos', [CorreoController::class, 'store'])->name('subirdatos');
+Route::post('/subir-excel', [CorreoController::class, 'subirExcel'])->name('subir-excel');
 Route::get('/obtenerDatosTabla', [CorreoController::class, 'show'])->name('obtenerDatosTabla');
 Route::get('/pdfCorreo/{idPlaza}/{fecha}', [CorreoController::class, 'pdfCorreo'])->name('pdfCorreo');
 Route::post('/GenerarPDFCorreo', [CorreoController::class, 'GenerarPDFCorreo'])->name('GenerarPDFCorreo');

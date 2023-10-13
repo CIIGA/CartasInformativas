@@ -68,12 +68,12 @@
                     <tr>
                         <td>Correos rebotados</td>
                         <td>{{$nulos}}</td>
-                        <td>{{$result2}}</td>
+                        <td>{{number_format($result2,2)}}</td>
                     </tr>
                     <tr>
                         <td>Correos Recibidos</td>
                         <td>{{$enviados}}</td>
-                        <td>{{$result1}}</td>
+                        <td>{{number_format($result1,2)}}</td>
                     </tr>
                     <tr>
                         <td>Total</td>
