@@ -31,20 +31,31 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('subirdatos') }}" method="POST" enctype="multipart/form-data"
-                    id="formSubirDatos">
+                {{-- <form id="formSubirDatos" action="{{ route('subirdatos') }}" method="POST" enctype="multipart/form-data" > --}}
+                <form id="formSubirDatos" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="mb-3">
-                        <label for="archivo" class="form-label">Selecciona un archivo:</label>
-                        <input type="text" name="idPlaza" value="{{ $idPlaza }}">
+                        <label for="archivo" class="form-label">Selecciona un archivo que contenga estos
+                            encabezados:</label>
+                        <table class="table table-success">
+                            <thead>
+                                <tr>
+                                    <td scope="col">Cuenta</td>
+                                    <td scope="col">Fecha_Leido</td>
+                                    <td scope="col">Fecha_enviado</td>
+                                </tr>
+                            </thead>
+                        </table>
+
+                        <input type="hidden" name="idPlaza" value="{{ $idPlaza }}">
                         <input type="file"
                             class="form-control
                         @error('fileExcel')
                         border border-danger rounded-2
                         @enderror"
-                            id="fileExcel" name="fileExcel">
+                            id="fileExcel" name="fileExcel"  accept=".xlsx">
                         <div class="bg-danger text-white text-center">
-                            <p>Solo formatos .Xlsx</p>
+                            <p>Solo formatos .xlsx</p>
                         </div>
                         @error('fileExcel')
                             <div class="text-danger text-center">
@@ -58,6 +69,95 @@
         </div>
     </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#formSubirDatos').submit(function(e) {
+            e.preventDefault(); // Evita la recarga de la página
+            $("#datosModal").modal("hide");
+            Swal.fire({
+                title: "Importando Datos",
+                html: "Por favor, espere...",
+                icon: "info",
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                },
+            });
+            var formData = new FormData(this);
+
+            $.ajax({
+                url: '/subirdatos',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    Swal.close();
+                    if (response.success == 'encabezados') {
+                        Swal.fire({
+                            title: "Error!",
+                            text: "Los encabezados no son los correctos",
+                            icon: "error",
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            
+                        });
+                    } else if (response.success == 'SinArchivo') {
+                        Swal.fire({
+                            title: "Error!",
+                            text: "No se encontro ningun archivo",
+                            icon: "error",
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            
+                        });
+                    } else if (response.success == 'SinDatos') {
+                        Swal.fire({
+                            title: "Error!",
+                            text: "Este archivo no tiene Datos que leer",
+                            icon: "error",
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            
+                        });
+                    } else if (response.success == 'exito') {
+                        Swal.fire({
+                            title: "Exito!",
+                            text: "Datos Cargados Correctamente",
+                            icon: "success",
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "Error!",
+                            text: "Error de petición",
+                            icon: "error",
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                            
+                        });
+                    }
+                },
+                error: function() {
+                    Swal.fire({
+                        title: "Error!",
+                        text: "Error de procesamiento",
+                        icon: "error",
+                        showConfirmButton: true,
+                        allowOutsideClick: false,
+                        
+                    });
+                }
+            });
+        });
+    });
+</script>
+
+
+
 <script>
     // Variable para almacenar la página actual
     var paginaActual = 1;
@@ -154,5 +254,3 @@
         }
     });
 </script>
-
-<script src="{{ asset('js/formExcel.js') }}"></script>

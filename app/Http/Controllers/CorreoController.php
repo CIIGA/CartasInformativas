@@ -37,21 +37,30 @@ class CorreoController extends Controller
             // Utilizar la función toCollection para cargar los datos desde el archivo
             $collection = Excel::toCollection(null, $archivo, null, null, false, 'UTF-8');
             // Si hay datos en la colección
-            if (!$collection->isEmpty()) {
+            if ($archivo->getSize() > 0) {
                 // Obtener los datos del primer elemento de la colección
                 $data = $collection->first()->toArray();
                 // Verificar si los encabezados son correctos
                 $expectedHeaders = ['Cuenta', 'Fecha_Leido', 'Fecha_enviado'];
                 $actualHeaders = $data[0];
-                if ($actualHeaders !== $expectedHeaders) {
-                    return redirect()->back()->with('error', 'El archivo no tiene los encabezados correctos.');
+                // Eliminar los espacios en blanco de los elementos del array
+                $actualHeaders = array_map('trim', $actualHeaders);
+
+                // Tomar solo las primeras tres columnas
+                $actualHeaders = array_slice($actualHeaders, 0, 3);
+                // dd($actualHeaders, $expectedHeaders);
+                if ($actualHeaders != $expectedHeaders) {
+                    return response()->json(['success' => 'encabezados']);
+                    // return redirect()->back()->with('error', 'El archivo no tiene los encabezados correctos.');
                 }
                 // Obtener la conexión dinámica
                 $databaseName2 = 'kpimplementta';
                 $connection = DatabaseUtils::getDynamicConnection($databaseName2);
+                
                 // Insertar los datos en la tabla utilizando Eloquent en lotes
-                $chunkSize = 100;
+                $chunkSize = 999;
                 $dataChunks = array_chunk(array_slice($data, 1), $chunkSize);
+                // dd($request->idPlaza);
                 foreach ($dataChunks as $chunk) {
                     foreach ($chunk as $row) {
                         if ($row[0] !== null) {
@@ -62,17 +71,17 @@ class CorreoController extends Controller
                             $insertar2->fecha_enviado = formatoFechaInt($row[2]);
                             $insertar2->idPlaza = $request->idPlaza;
                             $insertar2->save();
-                        } else {
-                            return redirect()->back()->with('error', 'Se encontro el campo cuenta vacio');
-                        }
+                        } 
                     }
                 }
                 // Desconectar la conexión dinámica
                 DB::disconnect('dynamic');
+            }else{
+                return response()->json(['success' => 'sinDatos']);
             }
-            return redirect()->back()->with('success', 'Datos cargados exitosamente.');
+            return response()->json(['success' => 'exito']);
         } else {
-            return redirect()->back()->with('error', 'No se ha subido ningún archivo.');
+            return response()->json(['success' => 'SinArchivo']);
         }
     }
     public function pdfCorreo($idPlaza, $fecha)
@@ -84,7 +93,7 @@ class CorreoController extends Controller
         //Ruta imagen del reporte 
         // Verificar si existe la imagen de la plaza
         $rutaImagen = public_path('img/plazas/' . $idPlaza . '.jpg'); // Suponemos que las imágenes son archivos JPG
-        $imagen=$idPlaza;
+        $imagen = $idPlaza;
         if (!file_exists($rutaImagen)) {
             // Obtener el contenido de la imagen por defecto
             $imagen = 'default';
@@ -103,9 +112,9 @@ class CorreoController extends Controller
         $databaseName2 = 'kpimplementta';
         $connection2 = DatabaseUtils::getDynamicConnection($databaseName2);
         $datos = DB::connection('dynamic')->select("select a.total, b.NotNull, c.Nulos from 
-        (select count(*) as total from historicoCampaniaCorreo where fecha_enviado=?) as a, 
-        (select count(*) as NotNull from historicoCampaniaCorreo where fecha_enviado=? and fecha_leido is not null) as b,
-        (select count(*) as Nulos from historicoCampaniaCorreo where fecha_enviado=? and fecha_leido is null) as c", [$fecha, $fecha, $fecha]);
+        (select count(*) as total from historicoCampaniaCorreo where fecha_enviado=? and idPlaza=?) as a, 
+        (select count(*) as NotNull from historicoCampaniaCorreo where fecha_enviado=? and idPlaza=? and fecha_leido is not null) as b,
+        (select count(*) as Nulos from historicoCampaniaCorreo where fecha_enviado=? and idPlaza=? and fecha_leido is null) as c", [$fecha,$idPlaza, $fecha,$idPlaza, $fecha,$idPlaza]);
         DB::disconnect('dynamic');
         if ($datos[0] == null) {
             return redirect()->back()->with('error', 'No informacion en esa fecha');
@@ -167,9 +176,9 @@ class CorreoController extends Controller
         $databaseName2 = 'kpimplementta';
         $connection2 = DatabaseUtils::getDynamicConnection($databaseName2);
         $datos = DB::connection('dynamic')->select("select a.total, b.NotNull, c.Nulos from 
-        (select count(*) as total from historicoCampaniaCorreo where fecha_enviado=?) as a, 
-        (select count(*) as NotNull from historicoCampaniaCorreo where fecha_enviado=? and fecha_leido is not null) as b,
-        (select count(*) as Nulos from historicoCampaniaCorreo where fecha_enviado=? and fecha_leido is null) as c", [$fecha, $fecha, $fecha]);
+        (select count(*) as total from historicoCampaniaCorreo where fecha_enviado=? and idPlaza=?) as a, 
+        (select count(*) as NotNull from historicoCampaniaCorreo where fecha_enviado=? and idPlaza=? and fecha_leido is not null) as b,
+        (select count(*) as Nulos from historicoCampaniaCorreo where fecha_enviado=? and idPlaza=? and fecha_leido is null) as c", [$fecha,$idPlaza, $fecha,$idPlaza, $fecha,$idPlaza]);
         DB::disconnect('dynamic');
         if ($datos[0] == null) {
             return redirect()->back()->with('error', 'No informacion en esa fecha');
@@ -200,17 +209,21 @@ class CorreoController extends Controller
         return $pdf->stream();
     }
 
-    public function fechas($idPlaza){
-        
-        $databaseName1= 'kpimplementta';
+    public function fechas($idPlaza)
+    {
+
+        $databaseName1 = 'kpimplementta';
         $connection1 = DatabaseUtils::getDynamicConnection($databaseName1);
         $historico = DB::connection('dynamic')->select("select fecha_enviado from historicoCampaniaCorreo where idPlaza=$idPlaza
         group by fecha_enviado order by fecha_enviado desc");
         DB::disconnect('dynamic');
-            $contenido = View::make('form.formCorreo', ['historico' => $historico,'idPlaza' => $idPlaza])->render();
-       
-        
+        $contenido = View::make('form.formCorreo', ['historico' => $historico, 'idPlaza' => $idPlaza])->render();
+
+
         //retornamos la respuesta json
         return response()->json(['contenido' => $contenido]);
     }
+
+
+   
 }
