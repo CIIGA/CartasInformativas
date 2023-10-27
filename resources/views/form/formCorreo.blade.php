@@ -87,7 +87,7 @@
             var formData = new FormData(this);
 
             $.ajax({
-                url: '/subirdatos',
+                url: 'https://gallant-driscoll.198-71-62-113.plesk.page/implementta/modulos/CartasInformativas/public/index.php/subirdatos',
                 type: 'POST',
                 data: formData,
                 processData: false,

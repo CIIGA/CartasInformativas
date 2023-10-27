@@ -190,9 +190,19 @@ class CorreoController extends Controller
         $result2 = ($nulos / $total) * 100;
         //Formato de fecha formateada
         $fechaFormateada = fechaReporte(0, $fecha);
+        $carbonFecha = \Carbon\Carbon::createFromFormat('d/m/Y', $fecha);
+        $anio = $carbonFecha->year;
+        $mes = mes($fecha);
+        // obtenemos el mes en letras
+        $mesLetras=mesLetras($mes);
+        // nombre de la plaza sin espacio
+        $plazaSin=str_replace(' ', '', $plaza);
         $pdf = Pdf::loadView(
             'pdf.correo2',
             [
+                'mes' => $mesLetras,
+                'anio' => $anio,
+                'plaza' => $plazaSin,
                 'total' => $total,
                 'enviados' => $enviados,
                 'nulos' => $nulos,
@@ -206,6 +216,9 @@ class CorreoController extends Controller
                 'fechaFormateada' => $fechaFormateada
             ]
         );
+        
+        $nombreArchivo ='Correos_'.$plazaSin.'_'.$mesLetras.$anio.'.pdf';
+        return $pdf->stream($nombreArchivo);
         return $pdf->stream();
     }
 

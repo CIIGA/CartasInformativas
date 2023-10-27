@@ -14,6 +14,12 @@ function mes($fecha)
     $mes = date('m', $timestamp);
     return $mes;
 }
+function mesLetras($mes)
+{
+    $meses=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+    
+    return $meses[$mes-1];
+}
 function redondearNumero($numero, $decimales = 2)
 {
     return round($numero, $decimales);
