@@ -5,15 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-<<<<<<< HEAD
-    <title>Correo</title>
+<title>Correos_{{$plaza}}_{{$mes.$anio}}</title>
     <!-- <link href="C:/wamp64/www/CartasInformativas/public/css/pdf.css" rel="stylesheet"> -->
     <link href="https://<?php echo $_SERVER['HTTP_HOST']; ?>/implementta/modulos/CartasInformativas/public/css/pdf.css" rel="stylesheet"> 
-=======
-    <title>Correos_{{$plaza}}_{{$mes.$anio}}</title>
-    <link href="C:/wamp64/www/CartasInformativas/public/css/pdf.css" rel="stylesheet">
-    {{-- <link href="https://<?php echo $_SERVER['HTTP_HOST']; ?>/implementta/modulos/CartasInformativas/public/css/pdf.css" rel="stylesheet"> --}}
->>>>>>> 5f41e56c320739948ba167db2b3ea7b68799667a
 </head>
 
 <body>
