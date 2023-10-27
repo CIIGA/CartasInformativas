@@ -104,15 +104,18 @@
                 var data = new google.visualization.DataTable();
                 data.addColumn('string', 'Label');
                 data.addColumn('number', 'Value');
+                total=0;
+                for (var j = 0; j < labels.length; j++) {
+                    total+=values[j];
+                }
                 for (var i = 0; i < labels.length; i++) {
-                    data.addRow([labels[i], values[i]]);
+                    data.addRow([labels[i] + ' '+parseFloat(((values[i]/total)*100).toFixed(2)) + '%', values[i]]);
                 }
 
                 var options = {
                     title: title,
-                    pieHole: 0.4,
                     chartArea: { left: 100, top: 70, width: '100%', height: '80%' },
-                    colors: ['#A5A5A5', '#457ABF'] // Personalizar los colores aquí
+                    colors: ['#A5A5A5', '#457ABF'], // Personalizar los colores aquí
                 };
 
                 var chart = new google.visualization.PieChart(document.getElementById('piechart'));

@@ -140,10 +140,10 @@
             <br />
         </div>
         <div>
-            <div id="piechart" style="width: 400px; height: 200px;"></div>
-            <div id="piechart2" style="width: 400px; height: 200px;"></div>
-            <div id="piechart3" style="width: 400px; height: 200px;"></div>
-            <div id="piechart4" style="width: 400px; height: 200px;"></div>
+            <div id="piechart" style="width: 500px; height: 300px;"></div>
+            <div id="piechart2" style="width: 500px; height: 300px;"></div>
+            <div id="piechart3" style="width: 500px; height: 300px;"></div>
+            <div id="piechart4" style="width: 500px; height: 300px;"></div>
         </div>
     </main>
     <div align="center">
@@ -171,18 +171,21 @@
                 var data = new google.visualization.DataTable();
                 data.addColumn('string', 'Label');
                 data.addColumn('number', 'Value');
+                total=0;
+                for (var j = 0; j < labels.length; j++) {
+                    total+=values[j];
+                }
                 for (var i = 0; i < labels.length; i++) {
-                    data.addRow([labels[i], values[i]]);
+                    data.addRow([labels[i] + ' '+parseFloat(((values[i]/total)*100).toFixed(2)) + '%', values[i]]);
                 }
 
                 var options = {
                     title: title,
-                    pieHole: 0.4,
                     chartArea: {
                         left: 100,
                         top: 70,
-                        width: '100%',
-                        height: '80%'
+                        width:600,
+                        height:500
                     },
                     colors: ['#76A646', '#457ABF', '#F29F05'] // Personalizar los colores aquí
                 };
@@ -223,18 +226,21 @@
                 var data = new google.visualization.DataTable();
                 data.addColumn('string', 'Label');
                 data.addColumn('number', 'Value');
+                total=0;
+                for (var j = 0; j < labels.length; j++) {
+                    total+=values[j];
+                }
                 for (var i = 0; i < labels.length; i++) {
-                    data.addRow([labels[i], values[i]]);
+                    data.addRow([labels[i] + ' '+parseFloat(((values[i]/total)*100).toFixed(2)) + '%', values[i]]);
                 }
 
                 var options = {
                     title: title,
-                    pieHole: 0.4,
                     chartArea: {
                         left: 100,
                         top: 70,
-                        width: '100%',
-                        height: '80%'
+                        width:600,
+                        height:500
                     },
                     colors: ['#457ABF', '#F27B35'] // Personalizar los colores aquí
                 };
@@ -274,18 +280,21 @@
                 var data = new google.visualization.DataTable();
                 data.addColumn('string', 'Label');
                 data.addColumn('number', 'Value');
+                total=0;
+                for (var j = 0; j < labels.length; j++) {
+                    total+=values[j];
+                }
                 for (var i = 0; i < labels.length; i++) {
-                    data.addRow([labels[i], values[i]]);
+                    data.addRow([labels[i] + ' '+parseFloat(((values[i]/total)*100).toFixed(2)) + '%', values[i]]);
                 }
 
                 var options = {
                     title: title,
-                    pieHole: 0.4,
                     chartArea: {
                         left: 100,
                         top: 70,
-                        width: '100%',
-                        height: '80%'
+                        width:600,
+                        height:500
                     },
                     colors: ['#80B2DF', '#264478', '#4875C5', '#A5A5A5'] // Personalizar los colores aquí
                 };
@@ -325,18 +334,21 @@
                 var data = new google.visualization.DataTable();
                 data.addColumn('string', 'Label');
                 data.addColumn('number', 'Value');
+                total=0;
+                for (var j = 0; j < labels.length; j++) {
+                    total+=values[j];
+                }
                 for (var i = 0; i < labels.length; i++) {
-                    data.addRow([labels[i], values[i]]);
+                    data.addRow([labels[i] + ' '+parseFloat(((values[i]/total)*100).toFixed(2)) + '%', values[i]]);
                 }
 
                 var options = {
                     title: title,
-                    pieHole: 0.4,
                     chartArea: {
                         left: 100,
                         top: 70,
-                        width: '100%',
-                        height: '80%'
+                        width:600,
+                        height:500
                     },
                     colors: ['#5B9BD5', '#70AD47', '#43682B', '#FFC000'] // Personalizar los colores aquí
                 };

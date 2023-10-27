@@ -89,8 +89,8 @@ class PregrabadaController extends Controller
         from [kpimplementta].[dbo].[profile_operation_t25] where 
         plaza = ? and numero = ? and año = ? and 
         tipo='Pregrabadas' and tabla ='1. General'", [$plaza, $mes, $anio]);
-        
-        $general=0;
+
+        $general = 0;
         foreach ($tabla1Pregrabada as $item) {
             $general++;
         }
@@ -104,14 +104,14 @@ class PregrabadaController extends Controller
         from [kpimplementta].[dbo].[profile_operation_t25] where 
         plaza = ? and numero =? and año = ? and 
         tipo='Pregrabadas' and tabla ='2. Desglose'", [$plaza, $mes, $anio]);
-        
-        $Desglose=0;
+
+        $Desglose = 0;
         foreach ($tabla2Pregrabada as $item) {
             $Desglose++;
         }
 
         DB::disconnect('dynamic');
-        
+
         //Nombre de la plaza 
         $nombre = extraerPrimeraPalabra($plaza);
         //Formato de fecha formateada
@@ -126,7 +126,7 @@ class PregrabadaController extends Controller
                 'general' => $general,
                 'totalDesglose' => $totalDesglose[0]->total,
                 'Desglose' => $Desglose,
-                
+
                 'rutaImagen' => $imagen,
                 //Nombre plaza 
                 'nombre' => $nombre,
@@ -158,6 +158,7 @@ class PregrabadaController extends Controller
         //Tabla 1 
         $anio = anio($fechaF);
         $mes = mes($fechaF);
+
         $databaseName1 = 'kpimplementta';
         $connection1 = DatabaseUtils::getDynamicConnection($databaseName1);
         $tabla1Pregrabada = DB::connection('dynamic')->select("select concepto, sum(cantidad) as cantidad  
@@ -170,8 +171,8 @@ class PregrabadaController extends Controller
         plaza = ? and numero = ? and año = ? and 
         tipo='Pregrabadas' and tabla ='1. General'", [$plaza, $mes, $anio]);
         DB::disconnect('dynamic');
-       
-        
+
+
         //Tabla 2
         $tabla2Pregrabada = DB::connection('dynamic')->select("select concepto, sum(cantidad) as cantidad  
         from [kpimplementta].[dbo].[profile_operation_t25] where 
@@ -183,15 +184,22 @@ class PregrabadaController extends Controller
         plaza = ? and numero =? and año = ? and 
         tipo='Pregrabadas' and tabla ='2. Desglose'", [$plaza, $mes, $anio]);
         DB::disconnect('dynamic');
-      
+
         //Nombre de la plaza 
         $nombre = extraerPrimeraPalabra($plaza);
         //Formato de fecha formateada
         $fechaFormateada = fechaReporte(0, $fechaF);
         //declaramos la variable pdf y mandamos los parametros
+        // obtenemos el mes en letras
+        $mesLetras=mesLetras($mes);
+        // nombre de la plaza sin espacio
+        $plazaSin=str_replace(' ', '', $plaza);
         $pdf = Pdf::loadView(
             'pdf.pregrabadas2',
             [
+                'mes' => $mesLetras,
+                'anio' => $anio,
+                'plaza' => $plazaSin,
                 'tabla1Pregrabada' => $tabla1Pregrabada,
                 'tabla2Pregrabada' => $tabla2Pregrabada,
                 'totalGeneral' => $totalGeneral[0]->total,
@@ -204,7 +212,8 @@ class PregrabadaController extends Controller
                 'imagenSeguimiento' => $imagenSeguimiento,
                 'imagenContestadas' => $imagenContestadas,
             ]
-        );
-        return $pdf->stream();
+            );
+        $nombreArchivo ='Pregrabadas_'.$plazaSin.'_'.$mesLetras.$anio.'.pdf';
+        return $pdf->stream($nombreArchivo);
     }
 }

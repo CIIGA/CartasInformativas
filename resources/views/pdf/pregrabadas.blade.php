@@ -68,7 +68,7 @@
                     <tr>
                         <td>{{ $item->concepto }}</td>
                         <td>{{ $item->cantidad }}</td>
-                        <td>{{ round(($item->cantidad / $totalGeneral) * 100,2) }}</td>
+                        <td>{{ round(($item->cantidad / $totalGeneral) * 100, 2) }}</td>
                     </tr>
                 @endforeach
                 <tr>
@@ -93,7 +93,7 @@
                     <tr>
                         <td>{{ $item->concepto }}</td>
                         <td>{{ $item->cantidad }}</td>
-                        <td>{{ round(($item->cantidad / $totalDesglose) * 100,2) }}</td>
+                        <td>{{ round(($item->cantidad / $totalDesglose) * 100, 2) }}</td>
                     </tr>
                 @endforeach
                 <tr>
@@ -105,8 +105,8 @@
         </table>
         <br />
         <div class="row">
-            <div id="piechart" style="width: 400px; height: 200px;"></div>
-            <div id="piechart2" style="width: 400px; height: 200px;"></div>
+            <div id="piechart" style="width: 500px; height: 300px;"></div>
+            <div id="piechart2" style="width: 500px; height: 300px;"></div>
         </div>
         <div>
             NOTA:
@@ -131,6 +131,7 @@
     </div>
     {{-- Llamadas contestadas --}}
     <script type="text/javascript">
+        
         function generatePieChart(labels, values, title) {
             google.charts.load('current', {
                 'packages': ['corechart']
@@ -139,22 +140,26 @@
 
             function drawChart() {
                 var data = new google.visualization.DataTable();
-                data.addColumn('string', 'Label');
-                data.addColumn('number', 'Value');
+                data.addColumn('string', 'Element');
+                data.addColumn('number', 'Percentage');
+                total=0;
+                for (var j = 0; j < labels.length; j++) {
+                    total+=values[j];
+                }
                 for (var i = 0; i < labels.length; i++) {
-                    data.addRow([labels[i], values[i]]);
+                    data.addRow([labels[i] + ' '+parseFloat(((values[i]/total)*100).toFixed(2)) + '%', values[i]]);
                 }
 
                 var options = {
                     title: title,
-                    pieHole: 0.4,
                     chartArea: {
                         left: 100,
                         top: 70,
                         width: '100%',
-                        height: '80%'
+                        height: '100%',
                     },
-                    colors: ['#264478', '#80B2DF'] // Personalizar los colores aquí
+
+                    colors: ['#264478', '#80B2DF'], // Personalizar los colores aquí
                 };
 
                 var chart = new google.visualization.PieChart(document.getElementById('piechart'));
@@ -193,22 +198,26 @@
 
             function drawChart() {
                 var data = new google.visualization.DataTable();
-                data.addColumn('string', 'Label');
-                data.addColumn('number', 'Value');
+                data.addColumn('string', 'Element');
+                data.addColumn('number', 'Percentage');
+                total=0;
+                for (var j = 0; j < labels.length; j++) {
+                    total+=values[j];
+                }
                 for (var i = 0; i < labels.length; i++) {
-                    data.addRow([labels[i], values[i]]);
+                    data.addRow([labels[i] + ' '+parseFloat(((values[i]/total)*100).toFixed(2)) + '%', values[i]]);
                 }
 
                 var options = {
                     title: title,
-                    pieHole: 0.4,
                     chartArea: {
                         left: 100,
                         top: 70,
                         width: '100%',
-                        height: '80%'
+                        height: '100%',
                     },
-                    colors: ['#F27B35', '#FFC000', '#76A646', '#4472C4'] // Personalizar los colores aquí
+
+                    colors: ['#F27B35', '#FFC000', '#76A646', '#4472C4'], // Personalizar los colores aquí
                 };
 
                 var chart = new google.visualization.PieChart(document.getElementById('piechart2'));
@@ -222,6 +231,10 @@
             }
         }
 
+
+        // Resto del código para obtener etiquetas y valores
+
+
         var etiquetas = [];
         var tabla2Pregrabada = @json($tabla2Pregrabada); // Convierte el array PHP en un objeto JavaScript
         @for ($i = 0; $i < $Desglose; $i++)
@@ -231,7 +244,7 @@
         @for ($i = 0; $i < $Desglose; $i++)
             valores.push({{ ($tabla2Pregrabada[$i]->cantidad / $totalGeneral) * 100 }});
         @endfor
-        
+
         generatePieChart(etiquetas, valores, 'No exitosas');
     </script>
 </body>

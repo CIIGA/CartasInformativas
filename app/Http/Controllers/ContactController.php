@@ -278,10 +278,17 @@ class ContactController extends Controller
         $nombre = extraerPrimeraPalabra($plaza);
         //Formato de fecha formateada
         $fechaFormateada = fechaReporte(0, $fechaF);
+        // obtenemos el mes en letras
+        $mesLetras=mesLetras($mes);
         //declaramos la variable pdf y mandamos los parametros
+        // nombre de la plaza sin espacio
+        $plazaSin=str_replace(' ', '', $plaza);
         $pdf = Pdf::loadView(
             'pdf.contact2',
             [
+                'mes' => $mesLetras,
+                'anio' => $anio,
+                'plaza' => $plazaSin,
                 //Tabla 1 General
                 'tabla1General' => $tabla1General,
                 'totalGeneral' => $totalGeneral[0]->total,
@@ -307,6 +314,7 @@ class ContactController extends Controller
                 'imagenSeguimiento' => $imagenSeguimiento,
             ]
         );
-        return $pdf->stream();
+        $nombreArchivo ='CartaContact_'.$plazaSin.'_'.$mesLetras.$anio.'.pdf';
+        return $pdf->stream($nombreArchivo);
     }
 }
