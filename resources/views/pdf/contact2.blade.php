@@ -28,9 +28,10 @@
         }
 
         .image {
-            top: -150px;
+            top: -130px;
             position: relative;
             margin-bottom: 0px;
+            margin-right: -20px
           
         }
 
@@ -130,12 +131,12 @@
                     </tr>
                 </tbody>
             </table>
-            <div class="image">
+            <div class="image" style="margin-top: -10px">
                 <img src="{{$imagenDesglose}}">
             </div>
         </div>
         <br />
-        <div class="row" style="margin-top: -40px">
+        <div class="row" style="margin-top: -47px">
             <table>
                 <tbody>
                     <tr>
@@ -155,7 +156,7 @@
                     </tr>
                 </tbody>
             </table>
-            <div class="image">
+            <div class="image" style="margin-top: -10px">
                 <img src="{{$imagenContestadas}}">
             </div>
         </div>
