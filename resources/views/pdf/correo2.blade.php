@@ -24,6 +24,7 @@
             <img class="imgHeader2" src="{{ $rutaImagen }}">
         </header>
         <main>
+            <!-- comentario -->
             <p class="align-right mr-20">
                 <span class="bold">
                     Asunto:
