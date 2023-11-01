@@ -9,7 +9,7 @@
    
 
     <title>Pregrabadas_{{$plaza}}_{{$mes.$anio}}</title>
-    <!-- <link href="C:/wamp64/www/CartasInformativas/public/css/pdf.css" rel="stylesheet"> -->
+    {{-- <link href="C:/wamp64/www/CartasInformativas/public/css/pdf.css" rel="stylesheet">  --}}
      <link href="https://<?php echo $_SERVER['HTTP_HOST']; ?>/implementta/modulos/CartasInformativas/public/css/pdf.css" rel="stylesheet">
 
     <style>
@@ -22,16 +22,16 @@
         .img1 {
             top: 0px;
             position: absolute;
-            left: -50px;
-            width: 320px;
-            height: 150px;
+            left: -80px;
+            width: 380px;
+            height: 230px;
         }
         .img2 {
             top: 0px;
             position: absolute;
             right: 0px;
-            height: 150px;
-            width: 320px;
+            height: 230px;
+            width: 380px;
         }
     </style>
 </head>
@@ -126,6 +126,11 @@
             <img class="img2" src="{{$imagenContestadas}}">
         </div>
         <br />
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
         <div>
             <p>
                 NOTA:

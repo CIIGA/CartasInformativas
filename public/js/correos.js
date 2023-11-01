@@ -7,6 +7,7 @@ $(document).ready(function () {
         }
         // Realizar la petición AJAX para obtener la lista de archivos de la plaza
         $.ajax({
+            // url: "/fechasCorreos/" + plazaId,
             url: "https://gallant-driscoll.198-71-62-113.plesk.page/implementta/modulos/CartasInformativas/public/index.php/fechasCorreos/" + plazaId, // Ruta de la función obtenerImagenPlaza del controlador con ajax
             type: "GET",
 

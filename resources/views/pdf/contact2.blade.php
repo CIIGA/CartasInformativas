@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 <title>CartaContact_{{$plaza}}_{{$mes.$anio}}</title>
-    <!-- <link href="C:/wamp64/www/CartasInformativas/public/css/pdf.css" rel="stylesheet"> -->
+    {{-- <link href="C:/wamp64/www/CartasInformativas/public/css/pdf.css" rel="stylesheet"> --}}
     <link href="https://<?php echo $_SERVER['HTTP_HOST']; ?>/implementta/modulos/CartasInformativas/public/css/pdf.css" rel="stylesheet"> 
 
     
@@ -14,14 +14,15 @@
     <style>
         .row {
             position: static;
-            margin-bottom: 5px;
-            margin-top: 5px;
+            margin-bottom: 0px;
+            margin-top: 0px;
+            height: 195px;
         }
 
         img {
-            margin-bottom: 15px;
-            width: 320px;
-            height: 150px;
+            margin-bottom: 0px;
+            width: 370px;
+            height: 200px;
             position: absolute;
             right: 0px;
         }
@@ -29,7 +30,7 @@
         .image {
             top: -150px;
             position: relative;
-            margin-bottom: 35px;
+            margin-bottom: 0px;
           
         }
 
@@ -134,7 +135,7 @@
             </div>
         </div>
         <br />
-        <div class="row">
+        <div class="row" style="margin-top: -40px">
             <table>
                 <tbody>
                     <tr>
@@ -159,7 +160,7 @@
             </div>
         </div>
         <br />
-        <div class="row">
+        <div class="row" style="margin-top: 20px">
             <table>
                 <tbody>
                     <tr>

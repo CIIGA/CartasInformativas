@@ -155,8 +155,8 @@
                     chartArea: {
                         left: 100,
                         top: 70,
-                        width: '100%',
-                        height: '100%',
+                        width: '500',
+                        height: '300',
                     },
 
                     colors: ['#264478', '#80B2DF'], // Personalizar los colores aquí
@@ -213,8 +213,8 @@
                     chartArea: {
                         left: 100,
                         top: 70,
-                        width: '100%',
-                        height: '100%',
+                        width: '500',
+                        height: '300',
                     },
 
                     colors: ['#F27B35', '#FFC000', '#76A646', '#4472C4'], // Personalizar los colores aquí
